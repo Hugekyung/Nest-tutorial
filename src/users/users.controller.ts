@@ -1,13 +1,14 @@
-import { Body, Controller, Get, Param, Post, Req } from '@nestjs/common';
+import { Body, Controller, Get, Param, Post, Query, Req } from '@nestjs/common';
 import { Request } from 'express';
 import { CreateUserDto } from './dto/credentialDto';
+import { UserListPaging } from './dto/userListPaging';
 
 @Controller('users')
 export class UsersController {
   @Get()
-  usersList(@Req() req: Request): string {
+  usersList(@Req() req: Request, @Query() query: UserListPaging): string {
     console.log(req.body);
-    return 'User Page!';
+    return `User Page! page : ${query.page}, limit : ${query.limit}`;
   }
 
   @Post()
