@@ -1,6 +1,6 @@
 import { Body, Controller, Get, Param, Post, Query, Req } from '@nestjs/common';
 import { Request } from 'express';
-import { CreateUserDto } from './dto/credentialDto';
+import { UserDto } from './dto/credentialDto';
 import { UserListPaging } from './dto/userListPaging';
 
 @Controller('users')
@@ -12,7 +12,7 @@ export class UsersController {
   }
 
   @Post()
-  createUser(@Body() createUserDto: CreateUserDto): string {
+  createUser(@Body() createUserDto: UserDto): string {
     console.log(createUserDto);
     return `Created user Successfully! Username : ${createUserDto.username}`;
   }

@@ -1,5 +1,5 @@
 import { Test, TestingModule } from '@nestjs/testing';
-import { CreateUserDto } from './dto/credentialDto';
+import { UserDto } from './dto/credentialDto';
 import { UsersService } from './users.service';
 
 describe('UsersService', () => {
@@ -14,7 +14,7 @@ describe('UsersService', () => {
   });
 
   it('createUser : 유저 이름과 비밀번호를 받아 유저를 생성한다(리스트에 푸시한다).', () => {
-    const createUserDto: CreateUserDto = {
+    const createUserDto: UserDto = {
       username: 'test-user',
       password: 'test-password',
     };
@@ -36,5 +36,16 @@ describe('UsersService', () => {
     } catch (error) {
       expect(error.message).toBe('이미 존재하는 유저이름입니다.');
     }
+  });
+
+  it('deleteUser : 유저 아이디와 비밀번호를 받아, 정보가 일치하는 유저가 있다면 삭제한다(리스트에서 삭제한다).', () => {
+    service.createUser({ username: 'test-user', password: 'test-password' });
+    service.createUser({ username: 'test-user1', password: 'test-password1' });
+    const deleteWantedUser = { username: 'test-user', password: 'test-password' };
+    service.deleteUser(deleteWantedUser);
+    expect(service.findAllUsers().length).toBe(1);
+    expect(service.findAllUsers()).toEqual([
+      { username: 'test-user1', password: 'test-password1' },
+    ]);
   });
 });
