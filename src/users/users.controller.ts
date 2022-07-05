@@ -10,12 +10,6 @@ export class UsersController {
   constructor(private userService: UsersService) {}
 
   @Get()
-  usersList(@Req() req: Request, @Query() query: UserListPaging): string {
-    console.log(req.body);
-    return `User Page! page : ${query.page}, limit : ${query.limit}`;
-  }
-
-  @Get()
   findAllUsers(): User[] {
     const userList = this.userService.findAllUsers();
     return userList;
