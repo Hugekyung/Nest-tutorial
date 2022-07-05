@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, HttpStatus, HttpException } from '@nestjs/common';
 import { UserDto } from './dto/credentialDto';
 import { User } from './types/user.interface';
 
@@ -13,14 +13,26 @@ export class UsersService {
   findUser(username: string) {
     const user = this.usersArr.find((user) => user.username === username);
     if (!user) {
-      throw new Error('일치하는 유저가 없습니다.');
+      throw new HttpException(
+        {
+          status: HttpStatus.FORBIDDEN,
+          message: '일치하는 유저가 없습니다.',
+        },
+        HttpStatus.FORBIDDEN,
+      );
     }
     return user;
   }
 
   createUser(createUserDto: UserDto) {
     if (this.usersArr.find((user) => user.username === createUserDto.username)) {
-      throw new Error('이미 존재하는 유저이름입니다.');
+      throw new HttpException(
+        {
+          status: HttpStatus.FORBIDDEN,
+          message: '이미 동일한 유저이름이 존재합니다.',
+        },
+        HttpStatus.FORBIDDEN,
+      );
     }
     this.usersArr.push(createUserDto);
   }

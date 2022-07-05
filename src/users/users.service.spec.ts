@@ -1,3 +1,4 @@
+import { HttpStatus } from '@nestjs/common';
 import { Test, TestingModule } from '@nestjs/testing';
 import { UserDto } from './dto/credentialDto';
 import { UsersService } from './users.service';
@@ -35,7 +36,8 @@ describe('UsersService', () => {
       try {
         service.createUser(newCreateUserDto);
       } catch (error) {
-        expect(error.message).toEqual('이미 존재하는 유저이름입니다.');
+        expect(error.status).toEqual(HttpStatus.FORBIDDEN);
+        expect(error.message).toEqual('이미 동일한 유저이름이 존재합니다.');
       }
     });
   });
@@ -54,19 +56,24 @@ describe('UsersService', () => {
       try {
         service.findUser(id);
       } catch (error) {
+        expect(error.status).toEqual(HttpStatus.FORBIDDEN);
         expect(error.message).toEqual('일치하는 유저가 없습니다.');
       }
     });
   });
 
-  it('deleteUser : 유저 아이디와 비밀번호를 받아, 정보가 일치하는 유저가 있다면 삭제한다(리스트에서 삭제한다).', () => {
-    service.createUser({ username: 'test-user', password: 'test-password' });
-    service.createUser({ username: 'test-user1', password: 'test-password1' });
-    const deleteWantedUser = { username: 'test-user', password: 'test-password' };
-    service.deleteUser(deleteWantedUser);
-    expect(service.findAllUsers().length).toBe(1);
-    expect(service.findAllUsers()).toEqual([
-      { username: 'test-user1', password: 'test-password1' },
-    ]);
+  describe('deleteUser TEST', () => {
+    it('deleteUser : 유저 아이디와 비밀번호를 받아, 정보가 일치하는 유저가 있다면 삭제한다(리스트에서 삭제한다).', () => {
+      service.createUser({ username: 'test-user', password: 'test-password' });
+      service.createUser({ username: 'test-user1', password: 'test-password1' });
+      const deleteWantedUser = { username: 'test-user', password: 'test-password' };
+      service.deleteUser(deleteWantedUser);
+      expect(service.findAllUsers().length).toBe(1);
+      expect(service.findAllUsers()).toEqual([
+        { username: 'test-user1', password: 'test-password1' },
+      ]);
+    });
+
+    it('deleteUser : 일치하는 유저 정보가 없다면, 에러를 반환한다.', () => {});
   });
 });
