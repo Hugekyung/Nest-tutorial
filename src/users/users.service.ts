@@ -10,6 +10,14 @@ export class UsersService {
     return this.usersArr;
   }
 
+  findUser(username: string) {
+    const user = this.usersArr.find((user) => user.username === username);
+    if (!user) {
+      throw new Error('일치하는 유저가 없습니다.');
+    }
+    return user;
+  }
+
   createUser(createUserDto: UserDto) {
     if (this.usersArr.find((user) => user.username === createUserDto.username)) {
       throw new Error('이미 존재하는 유저이름입니다.');

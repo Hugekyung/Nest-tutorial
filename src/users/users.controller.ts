@@ -1,7 +1,5 @@
-import { Body, Controller, Get, Param, Post, Query, Req, Res } from '@nestjs/common';
-import { Request } from 'express';
+import { Body, Controller, Get, Param, Post } from '@nestjs/common';
 import { UserDto } from './dto/credentialDto';
-import { UserListPaging } from './dto/userListPaging';
 import { User } from './types/user.interface';
 import { UsersService } from './users.service';
 
@@ -23,6 +21,7 @@ export class UsersController {
 
   @Get(':id')
   findUser(@Param('id') id: string): string {
-    return `user id parameter: ${id}`;
+    const user = this.userService.findUser(id);
+    return user.username;
   }
 }

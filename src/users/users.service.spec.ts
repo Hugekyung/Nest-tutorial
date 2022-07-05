@@ -40,6 +40,17 @@ describe('UsersService', () => {
     });
   });
 
+  describe('findUser TEST', () => {
+    it('findUser : username 파라미터를 받아 해당하는 유저가 있으면 해당 유저정보를 반환한다.', () => {
+      service.createUser({ username: 'test-user', password: 'test-password' });
+      const id = 'test-user';
+      const user = service.findUser(id);
+      expect(user.username).toEqual('test-user');
+    });
+
+    it('findUser : username과 일치하는 유저가 없으면 에러를 반환한다.', () => {});
+  });
+
   it('deleteUser : 유저 아이디와 비밀번호를 받아, 정보가 일치하는 유저가 있다면 삭제한다(리스트에서 삭제한다).', () => {
     service.createUser({ username: 'test-user', password: 'test-password' });
     service.createUser({ username: 'test-user1', password: 'test-password1' });
