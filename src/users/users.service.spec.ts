@@ -35,7 +35,7 @@ describe('UsersService', () => {
       try {
         service.createUser(newCreateUserDto);
       } catch (error) {
-        expect(error.message).toBe('이미 존재하는 유저이름입니다.');
+        expect(error.message).toEqual('이미 존재하는 유저이름입니다.');
       }
     });
   });
@@ -48,7 +48,15 @@ describe('UsersService', () => {
       expect(user.username).toEqual('test-user');
     });
 
-    it('findUser : username과 일치하는 유저가 없으면 에러를 반환한다.', () => {});
+    it('findUser : username과 일치하는 유저가 없으면 에러를 반환한다.', () => {
+      service.createUser({ username: 'test-user', password: 'test-password' });
+      const id = 'test-user-1';
+      try {
+        service.findUser(id);
+      } catch (error) {
+        expect(error.message).toEqual('일치하는 유저가 없습니다.');
+      }
+    });
   });
 
   it('deleteUser : 유저 아이디와 비밀번호를 받아, 정보가 일치하는 유저가 있다면 삭제한다(리스트에서 삭제한다).', () => {
