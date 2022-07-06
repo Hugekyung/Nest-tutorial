@@ -46,7 +46,15 @@ export class UsersService {
     let newUserArr: User[];
     if (matchedUser) {
       newUserArr = this.usersArr.filter((user) => user.username !== deleteWantedUser.username);
+      this.usersArr = newUserArr;
+    } else {
+      throw new HttpException(
+        {
+          status: HttpStatus.FORBIDDEN,
+          message: '일치하는 유저 정보가 없습니다.',
+        },
+        HttpStatus.FORBIDDEN,
+      );
     }
-    this.usersArr = newUserArr;
   }
 }

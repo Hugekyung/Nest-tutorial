@@ -74,6 +74,15 @@ describe('UsersService', () => {
       ]);
     });
 
-    it('deleteUser : 일치하는 유저 정보가 없다면, 에러를 반환한다.', () => {});
+    it('deleteUser : 일치하는 유저 정보가 없다면, 에러를 반환한다.', () => {
+      service.createUser({ username: 'test-user', password: 'test-password' });
+      const deleteWantedUser = { username: 'test-user-1', password: 'test-password' };
+      try {
+        service.deleteUser(deleteWantedUser);
+      } catch (error) {
+        expect(error.status).toEqual(HttpStatus.FORBIDDEN);
+        expect(error.message).toEqual('일치하는 유저 정보가 없습니다.');
+      }
+    });
   });
 });
