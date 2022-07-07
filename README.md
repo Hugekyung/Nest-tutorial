@@ -31,3 +31,20 @@ throw new HttpException(
 }
 
 ```
+
+### 유효성 검사
+
+- class-validator와 class-transformer 라이브러리를 통해 간단하게 유효성검사를 수행할 수 있다.
+- 아래와 같이 각 프로퍼티에 대한 데이터 정보를 정의해주면 해당 dto에 대한 유효성 검사를 수행하고 결과를 리턴한다.
+
+```ts
+export class UserDto {
+  @IsNotEmpty()
+  @IsString()
+  username: string;
+
+  @IsNotEmpty()
+  @IsString()
+  password: string;
+}
+```
