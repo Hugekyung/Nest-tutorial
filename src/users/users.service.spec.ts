@@ -19,6 +19,8 @@ describe('UsersService', () => {
       const createUserDto: UserDto = {
         username: 'test-user',
         password: 'test-password',
+        nickname: 'test-nickname',
+        gender: 'male',
       };
       service.createUser(createUserDto);
       expect(service.findAllUsers().length).toBe(1);
@@ -26,6 +28,8 @@ describe('UsersService', () => {
         {
           username: 'test-user',
           password: 'test-password',
+          nickname: 'test-nickname',
+          gender: 'male',
         },
       ]);
     });
@@ -39,6 +43,14 @@ describe('UsersService', () => {
         expect(error.status).toEqual(HttpStatus.FORBIDDEN);
         expect(error.message).toEqual('이미 동일한 유저이름이 존재합니다.');
       }
+    });
+
+    it('createUser : nickname과 gender 값이 RequestBody에 없다면 지정된 값으로 할당하여 유저를 생성한다.', () => {
+      service.createUser({ username: 'test-user', password: 'test-password' });
+      const username = 'test-user';
+      const user = service.findUser(username);
+      expect(user.nickname).toEqual('unknown');
+      expect(user.gender).toEqual('none');
     });
   });
 
@@ -70,7 +82,7 @@ describe('UsersService', () => {
       service.deleteUser(deleteWantedUser);
       expect(service.findAllUsers().length).toBe(1);
       expect(service.findAllUsers()).toEqual([
-        { username: 'test-user1', password: 'test-password1' },
+        { username: 'test-user1', password: 'test-password1', nickname: 'unknown', gender: 'none' },
       ]);
     });
 
