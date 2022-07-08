@@ -1,6 +1,6 @@
 import { Injectable, HttpStatus, HttpException } from '@nestjs/common';
 import { UserDto } from './dto/credentialDto';
-import { User } from './types/user.interface';
+import { User, UserInfo } from './types/user.interface';
 
 @Injectable()
 export class UsersService {
@@ -45,6 +45,8 @@ export class UsersService {
     }
     this.usersArr.push(createUserDto);
   }
+
+  updateUser(fieldToUpdate: Partial<UserInfo>) {}
 
   deleteUser(deleteWantedUser: UserDto) {
     const matchedUser = this.usersArr.find(
