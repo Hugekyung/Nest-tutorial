@@ -34,6 +34,15 @@ export class UsersService {
         HttpStatus.FORBIDDEN,
       );
     }
+
+    const nickname = createUserDto.nickname ?? null;
+    const gender = createUserDto.gender ?? null;
+    if (!nickname) {
+      createUserDto.nickname = 'unknown';
+    }
+    if (!gender) {
+      createUserDto.gender = 'none';
+    }
     this.usersArr.push(createUserDto);
   }
 
