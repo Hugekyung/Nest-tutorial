@@ -1,4 +1,4 @@
-import { Body, Controller, Get, Param, Post } from '@nestjs/common';
+import { Body, Controller, Get, Param, Post, UsePipes, ValidationPipe } from '@nestjs/common';
 import { UserDto } from './dto/credentialDto';
 import { User } from './types/user.interface';
 import { UsersService } from './users.service';
@@ -14,6 +14,7 @@ export class UsersController {
   }
 
   @Post()
+  @UsePipes(ValidationPipe)
   createUser(@Body() createUserDto: UserDto): string {
     this.userService.createUser(createUserDto);
     return `Create New User! : ${createUserDto.username}`;
@@ -22,6 +23,6 @@ export class UsersController {
   @Get(':id')
   findUser(@Param('id') id: string): string {
     const user = this.userService.findUser(id);
-    return user.username;
+    return `UserName : ${user.username}`;
   }
 }

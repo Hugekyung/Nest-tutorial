@@ -48,3 +48,19 @@ export class UserDto {
   password: string;
 }
 ```
+
+### Pipes
+
+- 파이프는 클라이언트의 요청에 따른 Request Data를 Controller route로 가기 전 중간에서 유효성 체크, 데이터 형변환을 수행하는 역할을 한다.
+- 따라서, 파이프를 사용하려면 `class-validator`와 `class-transformer` 라이브러리를 설치해야 한다.
+- 일반적으로 Pipe 형식으로 적용하는데, 핸들러-레벨, 파라미터-레벨, 글로벌-레벨의 3가지 형태로 나뉜다.
+- 아래는 핸들러-레벨의 파이프이며, ValidationPipe는 Nest에서 기본으로 제공하는 파이프이다.
+
+```ts
+@Post()
+  @UsePipes(ValidationPipe)
+  createUser(@Body() createUserDto: UserDto): string {
+    this.userService.createUser(createUserDto);
+    return `Create New User! : ${createUserDto.username}`;
+  }
+```
