@@ -46,7 +46,24 @@ export class UsersService {
     this.usersArr.push(createUserDto);
   }
 
-  updateUser(username: string, fieldToUpdate: Partial<UserInfo>) {}
+  updateUser(username: string, fieldToUpdate: Partial<UserInfo>) {
+    if (!this.usersArr.find((user) => user.username === username)) {
+      throw new HttpException(
+        {
+          status: HttpStatus.FORBIDDEN,
+          message: 'username에 해당하는 유저가 존재하지 않습니다.',
+        },
+        HttpStatus.FORBIDDEN,
+      );
+    }
+
+    this.usersArr.forEach((user) => {
+      if (user.username === username) {
+        user.nickname = fieldToUpdate.nickname ? fieldToUpdate.nickname : user.nickname;
+        user.gender = fieldToUpdate.gender ? fieldToUpdate.gender : user.gender;
+      }
+    });
+  }
 
   deleteUser(deleteWantedUser: UserDto) {
     const matchedUser = this.usersArr.find(

@@ -62,6 +62,8 @@ describe('UsersService', () => {
       expect(service.findUser(username).nickname).toEqual('new-nickname');
       expect(service.findUser(username).gender).toEqual('female');
     });
+
+    it('nickname과 gender 값 중 없는 값이 있다면 원래 설정되어 있는 기본 값을 유지한다.', () => {});
   });
 
   describe('findUser TEST', () => {
