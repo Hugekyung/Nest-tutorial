@@ -46,7 +46,7 @@ export class UsersService {
     this.usersArr.push(createUserDto);
   }
 
-  updateUser(fieldToUpdate: Partial<UserInfo>) {}
+  updateUser(username: string, fieldToUpdate: Partial<UserInfo>) {}
 
   deleteUser(deleteWantedUser: UserDto) {
     const matchedUser = this.usersArr.find(
