@@ -74,7 +74,6 @@ describe('UsersService', () => {
       };
       service.updateUser(username, password, fieldToUpdate);
       const updatedUser = service.findUser(username);
-      console.log(updatedUser);
       expect(updatedUser.nickname).toEqual('new-nickname');
       expect(updatedUser.gender).toEqual('male');
       expect(updatedUser.password).toEqual('update-password');
@@ -89,6 +88,18 @@ describe('UsersService', () => {
       } catch (error) {
         expect(error.status).toBe(HttpStatus.FORBIDDEN);
         expect(error.message).toEqual('username에 해당하는 유저가 존재하지 않습니다.');
+      }
+    });
+
+    it('수정하고자 하는 user의 password가 일치하지 않으면, 에러를 반환한다.', () => {
+      const username = 'test-user';
+      const password = 'test-password-2';
+      const fieldToUpdate: UserInfo = { nickname: 'new-nickname' };
+      try {
+        service.updateUser(username, password, fieldToUpdate);
+      } catch (error) {
+        expect(error.status).toBe(HttpStatus.UNAUTHORIZED);
+        expect(error.message).toEqual('패스워드가 일치하지 않습니다.');
       }
     });
   });
