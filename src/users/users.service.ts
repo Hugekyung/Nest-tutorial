@@ -46,8 +46,9 @@ export class UsersService {
     this.usersArr.push(createUserDto);
   }
 
-  updateUser(username: string, fieldToUpdate: Partial<UserInfo>) {
-    if (!this.usersArr.find((user) => user.username === username)) {
+  updateUser(username: string, password: string, fieldToUpdate: Partial<UserInfo>) {
+    const existedUser = this.usersArr.find((user) => user.username === username);
+    if (!existedUser) {
       throw new HttpException(
         {
           status: HttpStatus.FORBIDDEN,
@@ -57,10 +58,24 @@ export class UsersService {
       );
     }
 
+    const correctPassword = this.usersArr.find(
+      (user) => user.username === username && user.password === password,
+    );
+    if (!correctPassword) {
+      throw new HttpException(
+        {
+          status: HttpStatus.UNAUTHORIZED,
+          message: '패스워드가 일치하지 않습니다.',
+        },
+        HttpStatus.FORBIDDEN,
+      );
+    }
+
     this.usersArr.forEach((user) => {
       if (user.username === username) {
-        user.nickname = fieldToUpdate.nickname ? fieldToUpdate.nickname : user.nickname;
-        user.gender = fieldToUpdate.gender ? fieldToUpdate.gender : user.gender;
+        user.password = fieldToUpdate.updatePassword ?? user.password;
+        user.nickname = fieldToUpdate.nickname ?? user.nickname;
+        user.gender = fieldToUpdate.gender ?? user.gender;
       }
     });
   }

@@ -57,25 +57,35 @@ describe('UsersService', () => {
   describe('updateUser TEST', () => {
     it('username, nickname과 gender 값을 인자로 받아 해당 유저 정보를 업데이트 한다', () => {
       const username = 'test-user';
+      const password = 'test-password';
       const fieldToUpdate: UserInfo = { nickname: 'new-nickname', gender: 'female' };
-      service.updateUser(username, fieldToUpdate);
-      expect(service.findUser(username).nickname).toEqual('new-nickname');
-      expect(service.findUser(username).gender).toEqual('female');
+      service.updateUser(username, password, fieldToUpdate);
+      const updatedUser = service.findUser(username);
+      expect(updatedUser.nickname).toEqual('new-nickname');
+      expect(updatedUser.gender).toEqual('female');
     });
 
     it('nickname과 gender 값 중 없는 값이 있다면 원래 설정되어 있는 기본 값을 유지한다.', () => {
       const username = 'test-user';
-      const fieldToUpdate: UserInfo = { nickname: 'new-nickname' };
-      service.updateUser(username, fieldToUpdate);
-      expect(service.findUser(username).nickname).toEqual('new-nickname');
-      expect(service.findUser(username).gender).toEqual('male');
+      const password = 'test-password';
+      const fieldToUpdate: UserInfo = {
+        nickname: 'new-nickname',
+        updatePassword: 'update-password',
+      };
+      service.updateUser(username, password, fieldToUpdate);
+      const updatedUser = service.findUser(username);
+      console.log(updatedUser);
+      expect(updatedUser.nickname).toEqual('new-nickname');
+      expect(updatedUser.gender).toEqual('male');
+      expect(updatedUser.password).toEqual('update-password');
     });
 
     it('수정하고자 하는 username이 db(user배열)에 존재하지 않는다면 에러를 반환한다.', () => {
       const username = 'test-user-1';
+      const password = 'test-password';
       const fieldToUpdate: UserInfo = { nickname: 'new-nickname' };
       try {
-        service.updateUser(username, fieldToUpdate);
+        service.updateUser(username, password, fieldToUpdate);
       } catch (error) {
         expect(error.status).toBe(HttpStatus.FORBIDDEN);
         expect(error.message).toEqual('username에 해당하는 유저가 존재하지 않습니다.');

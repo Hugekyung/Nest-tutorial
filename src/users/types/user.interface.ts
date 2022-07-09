@@ -1,6 +1,7 @@
 import { Gender } from '../dto/credentialDto';
 
 export interface UserInfo {
+  updatePassword?: string;
   nickname?: string;
   gender?: Gender;
 }
