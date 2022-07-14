@@ -9,6 +9,8 @@ import {
   ValidationPipe,
 } from '@nestjs/common';
 import { UserDto } from './dto/credentialDto';
+import { VerifyEmailDto } from './dto/verifyEmailDto';
+import { UserLoginDto } from './dto/userLoginDto';
 import { User } from './types/user.interface';
 import { UsersService } from './users.service';
 
