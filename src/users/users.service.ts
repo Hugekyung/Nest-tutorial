@@ -23,7 +23,8 @@ export class UsersService {
       throw new HttpException('이미 동일한 유저이름이 존재합니다.', HttpStatus.FORBIDDEN);
     }
 
-    if (this.usersArr.find((user) => user.email === createUserDto.email)) {
+    const checkedUserExist = this.checkUserExists(createUserDto.email);
+    if (checkedUserExist) {
       throw new HttpException('해당 email이 이미 존재합니다.', HttpStatus.FORBIDDEN);
     }
 
@@ -37,6 +38,11 @@ export class UsersService {
       newUser.gender = 'none';
     }
     this.usersArr.push(newUser);
+  }
+
+  private checkUserExists(email: string) {
+    if (this.usersArr.find((user) => user.email === email)) return true;
+    return false;
   }
 
   updateUser(username: string, password: string, fieldToUpdate: Partial<UserInfo>) {

@@ -16,7 +16,7 @@ import { UsersService } from './users.service';
 
 @Controller('users')
 export class UsersController {
-  constructor(private userService: UsersService) {}
+  constructor(private readonly userService: UsersService) {}
 
   @Get()
   findAllUsers(): User[] {
@@ -42,7 +42,7 @@ export class UsersController {
   }
 
   @Get(':id')
-  findUser(@Param('id') userId: string) {
+  getUserInfo(@Param('id') userId: string) {
     console.log(userId);
     // const user = this.userService.findUser(id);
     // return `UserName : ${user.username}`;
