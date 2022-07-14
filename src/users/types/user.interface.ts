@@ -8,5 +8,6 @@ export interface UserInfo {
 
 export interface User extends UserInfo {
   username: string;
+  email: string;
   password: string;
 }

@@ -23,6 +23,10 @@ export class UsersService {
       throw new HttpException('이미 동일한 유저이름이 존재합니다.', HttpStatus.FORBIDDEN);
     }
 
+    if (this.usersArr.find((user) => user.email === createUserDto.email)) {
+      throw new HttpException('해당 email이 이미 존재합니다.', HttpStatus.FORBIDDEN);
+    }
+
     const newUser = { ...createUserDto };
     const nickname = newUser.nickname ?? null;
     const gender = newUser.gender ?? null;

@@ -63,7 +63,18 @@ describe('UsersService', () => {
       expect(user.gender).toEqual('none');
     });
 
-    it('createUser : email값이 중복될 경우 에러를 반환한다.', () => {});
+    it('createUser : email값이 중복될 경우 에러를 반환한다.', () => {
+      try {
+        service.createUser({
+          username: 'test-user-2',
+          email: 'test-user@example.com',
+          password: 'test-password',
+        });
+      } catch (error) {
+        expect(error.status).toBe(HttpStatus.FORBIDDEN);
+        expect(error.message).toEqual('해당 email이 이미 존재합니다.');
+      }
+    });
   });
 
   describe('updateUser TEST', () => {
