@@ -1,4 +1,4 @@
-import { IsNotEmpty, IsOptional, IsString } from 'class-validator';
+import { IsEmail, IsNotEmpty, IsOptional, IsString } from 'class-validator';
 import { Gender } from '../types/constants';
 
 export type Gender = typeof Gender[keyof typeof Gender];
@@ -6,17 +6,21 @@ export type Gender = typeof Gender[keyof typeof Gender];
 export class UserDto {
   @IsNotEmpty()
   @IsString()
-  username: string;
+  readonly username: string;
+
+  @IsNotEmpty()
+  @IsEmail()
+  readonly email: string;
 
   @IsNotEmpty()
   @IsString()
-  password: string;
+  readonly password: string;
 
   @IsOptional()
   @IsString()
-  nickname?: string;
+  readonly nickname?: string;
 
   @IsOptional()
   @IsString()
-  gender?: Gender;
+  readonly gender?: Gender;
 }

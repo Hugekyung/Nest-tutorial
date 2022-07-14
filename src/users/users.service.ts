@@ -23,15 +23,16 @@ export class UsersService {
       throw new HttpException('이미 동일한 유저이름이 존재합니다.', HttpStatus.FORBIDDEN);
     }
 
-    const nickname = createUserDto.nickname ?? null;
-    const gender = createUserDto.gender ?? null;
+    const newUser = { ...createUserDto };
+    const nickname = newUser.nickname ?? null;
+    const gender = newUser.gender ?? null;
     if (!nickname) {
-      createUserDto.nickname = 'unknown';
+      newUser.nickname = 'unknown';
     }
     if (!gender) {
-      createUserDto.gender = 'none';
+      newUser.gender = 'none';
     }
-    this.usersArr.push(createUserDto);
+    this.usersArr.push(newUser);
   }
 
   updateUser(username: string, password: string, fieldToUpdate: Partial<UserInfo>) {

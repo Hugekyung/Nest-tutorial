@@ -14,6 +14,7 @@ describe('UsersService', () => {
 
     const createUserDto: UserDto = {
       username: 'test-user',
+      email: 'test-user@example.com',
       password: 'test-password',
       nickname: 'test-nickname',
       gender: 'male',
@@ -28,6 +29,7 @@ describe('UsersService', () => {
       expect(service.findAllUsers()).toEqual([
         {
           username: 'test-user',
+          email: 'test-user@example.com',
           password: 'test-password',
           nickname: 'test-nickname',
           gender: 'male',
@@ -36,7 +38,11 @@ describe('UsersService', () => {
     });
 
     it('createUser : 이미 등록되어 있는 username이 존재한다면 에러를 반환한다.', () => {
-      const newCreateUserDto = { username: 'test-user', password: 'test-password' };
+      const newCreateUserDto = {
+        username: 'test-user',
+        email: 'test-user2@example.com',
+        password: 'test-password',
+      };
       try {
         service.createUser(newCreateUserDto);
       } catch (error) {
@@ -46,12 +52,18 @@ describe('UsersService', () => {
     });
 
     it('createUser : nickname과 gender 값이 RequestBody에 없다면 지정된 값으로 할당하여 유저를 생성한다.', () => {
-      service.createUser({ username: 'test-user-2', password: 'test-password' });
+      service.createUser({
+        username: 'test-user-2',
+        email: 'test-user2@example.com',
+        password: 'test-password',
+      });
       const username = 'test-user-2';
       const user = service.findUser(username);
       expect(user.nickname).toEqual('unknown');
       expect(user.gender).toEqual('none');
     });
+
+    it('createUser : email값이 중복될 경우 에러를 반환한다.', () => {});
   });
 
   describe('updateUser TEST', () => {
@@ -124,17 +136,35 @@ describe('UsersService', () => {
 
   describe('deleteUser TEST', () => {
     it('deleteUser : 유저 아이디와 비밀번호를 받아, 정보가 일치하는 유저가 있다면 삭제한다(리스트에서 삭제한다).', () => {
-      service.createUser({ username: 'test-user1', password: 'test-password1' });
-      const deleteWantedUser = { username: 'test-user', password: 'test-password' };
+      service.createUser({
+        username: 'test-user1',
+        email: 'test-user2@example.com',
+        password: 'test-password1',
+      });
+      const deleteWantedUser = {
+        username: 'test-user',
+        email: 'test-user@example.com',
+        password: 'test-password',
+      };
       service.deleteUser(deleteWantedUser);
       expect(service.findAllUsers().length).toBe(1);
       expect(service.findAllUsers()).toEqual([
-        { username: 'test-user1', password: 'test-password1', nickname: 'unknown', gender: 'none' },
+        {
+          username: 'test-user1',
+          email: 'test-user2@example.com',
+          password: 'test-password1',
+          nickname: 'unknown',
+          gender: 'none',
+        },
       ]);
     });
 
     it('deleteUser : 일치하는 유저 정보가 없다면, 에러를 반환한다.', () => {
-      const deleteWantedUser = { username: 'test-user-1', password: 'test-password' };
+      const deleteWantedUser = {
+        username: 'test-user-1',
+        email: 'test-user2@example.com',
+        password: 'test-password',
+      };
       try {
         service.deleteUser(deleteWantedUser);
       } catch (error) {
