@@ -6,7 +6,7 @@ import { EmailOptions } from './types/email.interface';
 
 @Injectable()
 export class EmailService {
-  private transporter: Mail;
+  transporter: Mail;
 
   constructor() {
     this.transporter = nodemailer.createTransport({
