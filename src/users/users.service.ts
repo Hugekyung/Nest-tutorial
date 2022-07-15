@@ -42,11 +42,13 @@ export class UsersService {
     if (!gender) {
       newUser.gender = 'none';
     }
-    this.usersArr.push(newUser);
 
     // TODO : DB 연동 후 적용 예정
     // await this.saveUser(createUserDto, signupVerifyToken);
-    // await this.sendMemberJoinEmail(createUserDto.email, signupVerifyToken);
+    await this.sendMemberJoinEmail(createUserDto.email, signupVerifyToken);
+    this.usersArr.push(newUser);
+
+    return { username: newUser.username };
   }
 
   private checkUserExists(email: string) {

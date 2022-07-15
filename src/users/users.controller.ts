@@ -26,9 +26,9 @@ export class UsersController {
 
   @Post()
   @UsePipes(ValidationPipe)
-  createUser(@Body() createUserDto: UserDto): string {
-    this.userService.createUser(createUserDto);
-    return `Create New User! : ${createUserDto.username}`;
+  async createUser(@Body() createUserDto: UserDto): Promise<string> {
+    const user = await this.userService.createUser(createUserDto);
+    return `Create ${user.username}'s Identity Successfully!`;
   }
 
   @Post()
