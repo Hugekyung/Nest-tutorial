@@ -6,8 +6,9 @@ import { EmailService } from 'src/email/email.service';
 
 @Injectable()
 export class UsersService {
-  constructor(private emailService: EmailService) {}
   private usersArr: User[] = [];
+
+  constructor(private emailService: EmailService) {}
 
   findAllUsers() {
     return this.usersArr;
