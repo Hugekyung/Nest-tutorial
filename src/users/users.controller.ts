@@ -41,7 +41,7 @@ export class UsersController {
     console.log(userLoginDto);
   }
 
-  @Get(':id')
+  @Get('/:id')
   getUserInfo(@Param('id') userId: string) {
     console.log(userId);
     // const user = this.userService.findUser(id);
