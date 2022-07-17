@@ -1,7 +1,7 @@
 import Mail = require('nodemailer/lib/mailer');
 import * as nodemailer from 'nodemailer';
 
-import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
+import { Injectable } from '@nestjs/common';
 import { EmailOptions } from './types/email.interface';
 
 @Injectable()
@@ -32,11 +32,6 @@ export class EmailService {
         `,
     };
 
-    try {
-      const result = await this.transporter.sendMail(mailOptions);
-      return result;
-    } catch (error) {
-      throw new HttpException(error.message, HttpStatus.UNAUTHORIZED);
-    }
+    await this.transporter.sendMail(mailOptions);
   }
 }
