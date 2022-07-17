@@ -1,5 +1,6 @@
 import { HttpStatus } from '@nestjs/common';
 import { Test, TestingModule } from '@nestjs/testing';
+import { EmailService } from '../email/email.service';
 import { UserDto } from './dto/credentialDto';
 import { UserInfo } from './types/user.interface';
 import { UsersService } from './users.service';
@@ -9,7 +10,7 @@ describe('UsersService', () => {
 
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
-      providers: [UsersService],
+      providers: [UsersService, EmailService],
     }).compile();
 
     const createUserDto: UserDto = {
@@ -19,7 +20,9 @@ describe('UsersService', () => {
       nickname: 'test-nickname',
       gender: 'male',
     };
+
     service = module.get<UsersService>(UsersService);
+    service.sendMemberJoinEmail = jest.fn();
     service.createUser(createUserDto);
   });
 
@@ -37,22 +40,22 @@ describe('UsersService', () => {
       ]);
     });
 
-    it('createUser : 이미 등록되어 있는 username이 존재한다면 에러를 반환한다.', () => {
+    it('createUser : 이미 등록되어 있는 username이 존재한다면 에러를 반환한다.', async () => {
       const newCreateUserDto = {
         username: 'test-user',
         email: 'test-user2@example.com',
         password: 'test-password',
       };
       try {
-        service.createUser(newCreateUserDto);
+        await service.createUser(newCreateUserDto);
       } catch (error) {
         expect(error.status).toEqual(HttpStatus.FORBIDDEN);
         expect(error.message).toEqual('이미 동일한 유저이름이 존재합니다.');
       }
     });
 
-    it('createUser : nickname과 gender 값이 RequestBody에 없다면 지정된 값으로 할당하여 유저를 생성한다.', () => {
-      service.createUser({
+    it('createUser : nickname과 gender 값이 RequestBody에 없다면 지정된 값으로 할당하여 유저를 생성한다.', async () => {
+      await service.createUser({
         username: 'test-user-2',
         email: 'test-user2@example.com',
         password: 'test-password',
@@ -63,9 +66,9 @@ describe('UsersService', () => {
       expect(user.gender).toEqual('none');
     });
 
-    it('createUser : email값이 중복될 경우 에러를 반환한다.', () => {
+    it('createUser : email값이 중복될 경우 에러를 반환한다.', async () => {
       try {
-        service.createUser({
+        await service.createUser({
           username: 'test-user-2',
           email: 'test-user@example.com',
           password: 'test-password',
@@ -146,8 +149,8 @@ describe('UsersService', () => {
   });
 
   describe('deleteUser TEST', () => {
-    it('deleteUser : 유저 아이디와 비밀번호를 받아, 정보가 일치하는 유저가 있다면 삭제한다(리스트에서 삭제한다).', () => {
-      service.createUser({
+    it('deleteUser : 유저 아이디와 비밀번호를 받아, 정보가 일치하는 유저가 있다면 삭제한다(리스트에서 삭제한다).', async () => {
+      await service.createUser({
         username: 'test-user1',
         email: 'test-user2@example.com',
         password: 'test-password1',

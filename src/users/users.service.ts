@@ -2,7 +2,7 @@ import { Injectable, HttpStatus, HttpException } from '@nestjs/common';
 import { v4 as uuidV4 } from 'uuid';
 import { UserDto } from './dto/credentialDto';
 import { User, UserInfo } from './types/user.interface';
-import { EmailService } from 'src/email/email.service';
+import { EmailService } from '../email/email.service';
 
 @Injectable()
 export class UsersService {
@@ -61,7 +61,7 @@ export class UsersService {
     return; // TODO : DB 연동 후 구현 예정
   }
 
-  private async sendMemberJoinEmail(email: string, signupVerifyToken: string) {
+  async sendMemberJoinEmail(email: string, signupVerifyToken: string) {
     await this.emailService.sendMemberJoinVerification(email, signupVerifyToken);
   }
 
