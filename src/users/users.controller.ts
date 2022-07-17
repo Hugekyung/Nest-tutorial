@@ -37,9 +37,9 @@ export class UsersController {
     return await this.userService.verifyEmail(signupVerifyToken);
   }
 
-  @Post()
-  userLogin(@Body() userLoginDto: UserLoginDto) {
-    console.log(userLoginDto);
+  @Post('/login')
+  async userLogin(@Body() userLoginDto: UserLoginDto) {
+    return await this.userService.LoginUser(userLoginDto);
   }
 
   @Get('/:id')

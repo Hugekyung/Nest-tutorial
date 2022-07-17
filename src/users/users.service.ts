@@ -3,6 +3,7 @@ import { v4 as uuidV4 } from 'uuid';
 import { UserDto } from './dto/credentialDto';
 import { User, UserInfo } from './types/user.interface';
 import { EmailService } from '../email/email.service';
+import { UserLoginDto } from './dto/userLoginDto';
 
 @Injectable()
 export class UsersService {
@@ -20,6 +21,12 @@ export class UsersService {
       throw new HttpException('일치하는 유저가 없습니다.', HttpStatus.FORBIDDEN);
     }
     return user;
+  }
+
+  async LoginUser(userLoginDto: UserLoginDto) {
+    // TODO
+    // 1. email, password를 가진 유저가 존재하는지 DB에서 확인하고 없다면 에러 처리
+    // 2. JWT를 발급
   }
 
   async createUser(createUserDto: UserDto) {
