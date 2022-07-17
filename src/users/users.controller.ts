@@ -31,9 +31,10 @@ export class UsersController {
     return `Create ${user.username}'s Identity Successfully!`;
   }
 
-  @Post()
-  verifyEmail(@Query() verifyEmailDto: VerifyEmailDto) {
-    console.log(verifyEmailDto);
+  @Post('/email-verify')
+  async verifyEmail(@Query() verifyEmailDto: VerifyEmailDto) {
+    const { signupVerifyToken } = verifyEmailDto;
+    return await this.userService.verifyEmail(signupVerifyToken);
   }
 
   @Post()

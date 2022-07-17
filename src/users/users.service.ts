@@ -65,6 +65,12 @@ export class UsersService {
     await this.emailService.sendMemberJoinVerification(email, signupVerifyToken);
   }
 
+  async verifyEmail(signupVerifyToken: string) {
+    // TODO
+    // 1. DB에서 signupVerifyToken으로 회원 가입 처리중인 유저가 있는지 조회하고 없다면 에러 처리
+    // 2. 바로 로그인 상태가 되도록 JWT를 발급
+  }
+
   updateUser(username: string, password: string, fieldToUpdate: Partial<UserInfo>) {
     const existedUser = this.usersArr.find((user) => user.username === username);
     if (!existedUser) {
