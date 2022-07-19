@@ -1,15 +1,21 @@
 import { Injectable, HttpStatus, HttpException } from '@nestjs/common';
+import { InjectRepository } from '@nestjs/typeorm';
+import { Repository } from 'typeorm';
 import { v4 as uuidV4 } from 'uuid';
 import { UserDto } from './dto/credentialDto';
 import { User, UserInfo } from './types/user.interface';
 import { EmailService } from '../email/email.service';
 import { UserLoginDto } from './dto/userLoginDto';
+import { UserEntity } from './user.entity';
 
 @Injectable()
 export class UsersService {
   private usersArr: User[] = [];
 
-  constructor(private emailService: EmailService) {}
+  constructor(
+    @InjectRepository(UserEntity) private usersRepository: Repository<UserEntity>,
+    private emailService: EmailService,
+  ) {}
 
   findAllUsers() {
     return this.usersArr;
@@ -56,10 +62,9 @@ export class UsersService {
       newUser.gender = 'none';
     }
 
-    // TODO : DB 연동 후 적용 예정
-    // await this.saveUser(createUserDto, signupVerifyToken);
+    await this.saveUser(newUser, signupVerifyToken);
     await this.sendMemberJoinEmail(createUserDto.email, signupVerifyToken);
-    this.usersArr.push(newUser);
+    // this.usersArr.push(newUser);
 
     return { username: newUser.username };
   }
@@ -70,8 +75,15 @@ export class UsersService {
     // TODO : DB 연동 예정
   }
 
-  private saveUser(createUserDto: UserDto, signupVerifyToken: string) {
-    return; // TODO : DB 연동 후 구현 예정
+  private async saveUser(newUser: UserDto, signupVerifyToken: string) {
+    const user = new UserEntity();
+    user.username = newUser.username;
+    user.email = newUser.email;
+    user.password = newUser.password;
+    user.nickname = newUser.nickname;
+    user.gender = newUser.gender;
+    user.signupVerifyToken = signupVerifyToken;
+    await this.usersRepository.save(user);
   }
 
   async sendMemberJoinEmail(email: string, signupVerifyToken: string) {
