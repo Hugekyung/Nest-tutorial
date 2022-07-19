@@ -23,7 +23,7 @@ export class UsersService {
     return user;
   }
 
-  async getUserInfo(userId: string): Promise<void> {
+  async getUserInfo(userId: number): Promise<void> {
     // 1. userId를 가진 유저가 존재하는지 DB에서 확인하고 없다면 에러 처리
     // 2. 조회된 데이터를 UserInfo 타입으로 응답 Promise<UserInfo>
     return;

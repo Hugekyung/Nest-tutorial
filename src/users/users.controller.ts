@@ -3,6 +3,7 @@ import {
   Controller,
   Get,
   Param,
+  ParseIntPipe,
   Post,
   Query,
   UsePipes,
@@ -43,7 +44,7 @@ export class UsersController {
   }
 
   @Get('/:id')
-  async getUserInfo(@Param('id') userId: string) {
+  async getUserInfo(@Param('id', ParseIntPipe) userId: number) {
     return await this.userService.getUserInfo(userId);
   }
 }

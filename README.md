@@ -51,16 +51,46 @@ export class UserDto {
 
 ### Pipes
 
-- 파이프는 클라이언트의 요청에 따른 Request Data를 Controller route로 가기 전 중간에서 유효성 체크, 데이터 형변환을 수행하는 역할을 한다.
-- 따라서, 파이프를 사용하려면 `class-validator`와 `class-transformer` 라이브러리를 설치해야 한다.
+- 파이프는 클라이언트의 요청에 따른 객체(Request-Data)를 router-handler로 가기 전 중간에서 유효성 검사, 데이터 형변환을 수행하는 역할을 한다.
+- @nest/common 패키지에서 제공하는 내장 파이프가 있지만, 커스텀 파이프를 사용하려면 `class-validator`와 `class-transformer` 라이브러리를 설치해야 한다.
+- 아래는 Nest에서 기본 제공하는 파이프
+
+```
+ValidationPipe
+ParseIntPipe
+ParseFloatPipe
+ParseBoolPipe
+ParseArrayPipe
+ParseUUIDPipe
+ParseEnumPipe
+DefaultValuePipe
+ParseFilePipe
+```
+
 - 일반적으로 Pipe 형식으로 적용하는데, 핸들러-레벨, 파라미터-레벨, 글로벌-레벨의 3가지 형태로 나뉜다.
-- 아래는 핸들러-레벨의 파이프이며, ValidationPipe는 Nest에서 기본으로 제공하는 파이프이다.
 
 ```ts
+// 핸들러-레벨
 @Post()
-  @UsePipes(ValidationPipe)
-  createUser(@Body() createUserDto: UserDto): string {
-    this.userService.createUser(createUserDto);
-    return `Create New User! : ${createUserDto.username}`;
-  }
+@UsePipes(ValidationPipe)
+createUser(@Body() createUserDto: UserDto): string {
+  this.userService.createUser(createUserDto);
+  return `Create New User! : ${createUserDto.username}`;
+}
+
+// 파라미터-레벨
+@Get(':id')
+findOne(@Param('id', ParseIntPipe) id: number) {
+  return this.usersService.findOne(id);
+}
+```
+
+- 만약 유효성 검사에 실패하게 될 경우 요청은 router-handler로 넘어가지 못하고 에러를 반환한다.
+
+```JSON
+{
+    "statusCode": 400,
+    "message": "Validation failed (numeric string is expected)",
+    "error": "Bad Request"
+}
 ```
