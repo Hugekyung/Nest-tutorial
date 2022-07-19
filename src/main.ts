@@ -6,7 +6,7 @@ import * as dotenv from 'dotenv';
 import * as path from 'path';
 
 dotenv.config({
-  path: path.resolve(process.env.NODE_ENV === 'pord' ? '.pord.env' : '.dev.env'),
+  path: path.resolve(process.env.NODE_ENV === 'prod' ? '.pord.env' : '.dev.env'),
 });
 
 async function bootstrap() {
