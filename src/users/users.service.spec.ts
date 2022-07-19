@@ -80,6 +80,10 @@ describe('UsersService', () => {
     });
   });
 
+  describe('checkUserExists TEST', () => {
+    it('checkUserExists : 이미 등록된 이메일인 경우 true를 반환합니다.', () => {});
+  });
+
   describe('updateUser TEST', () => {
     it('username, nickname과 gender 값을 인자로 받아 해당 유저 정보를 업데이트 한다', () => {
       const username = 'test-user';

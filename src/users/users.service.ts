@@ -69,10 +69,9 @@ export class UsersService {
     return { username: newUser.username };
   }
 
-  private checkUserExists(email: string) {
-    if (this.usersArr.find((user) => user.email === email)) return true;
-    return false;
-    // TODO : DB 연동 예정
+  private async checkUserExists(email: string) {
+    const user = await this.usersRepository.findOne({ email });
+    return user !== undefined;
   }
 
   private async saveUser(newUser: UserDto, signupVerifyToken: string) {
