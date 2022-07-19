@@ -12,7 +12,11 @@ dotenv.config({
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
   const PORT = process.env.PORT || process.env.ALTER_PORT;
-  app.useGlobalPipes(new ValidationPipe());
+  app.useGlobalPipes(
+    new ValidationPipe({
+      transform: true,
+    }),
+  );
   await app.listen(PORT);
   console.log(`Started App Successfully with ${PORT} ...`);
 }
