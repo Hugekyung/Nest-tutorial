@@ -16,5 +16,5 @@ export const typeORMConfig: TypeOrmModuleOptions = {
   password: process.env.DB_PASSWORD,
   database: process.env.DB_NAME,
   entities: [__dirname + '/../**/*.entity.{js,ts}'],
-  synchronize: Boolean(process.env.DB_SYNC), // true로 설정 시, 매번 db 초기화(production에서는 절대 true로 설정하면 안됨)
+  synchronize: true, // true로 설정 시, 매번 db 초기화(production에서는 절대 true로 설정하면 안됨)
 };

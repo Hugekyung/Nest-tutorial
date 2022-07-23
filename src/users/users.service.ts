@@ -64,7 +64,6 @@ export class UsersService {
 
     await this.saveUser(newUser, signupVerifyToken);
     await this.sendMemberJoinEmail(createUserDto.email, signupVerifyToken);
-    // this.usersArr.push(newUser);
 
     return { username: newUser.username };
   }
