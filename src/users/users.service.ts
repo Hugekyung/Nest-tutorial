@@ -1,9 +1,9 @@
 import { Injectable, HttpStatus, HttpException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Repository } from 'typeorm';
+import { Connection, Repository } from 'typeorm';
 import { v4 as uuidV4 } from 'uuid';
 import { UserDto } from './dto/credentialDto';
-import { User, UserInfo } from './types/user.interface';
+import { UserInfo } from './types/user.interface';
 import { EmailService } from '../email/email.service';
 import { UserLoginDto } from './dto/userLoginDto';
 import { UserEntity } from './user.entity';
@@ -13,6 +13,7 @@ export class UsersService {
   constructor(
     @InjectRepository(UserEntity) private usersRepository: Repository<UserEntity>,
     private emailService: EmailService,
+    private connection: Connection,
   ) {}
 
   async findAllUsers() {
@@ -64,8 +65,23 @@ export class UsersService {
       newUser.gender = 'none';
     }
 
-    await this.saveUser(newUser, signupVerifyToken);
-    await this.sendMemberJoinEmail(createUserDto.email, signupVerifyToken);
+    const queryRunner = this.connection.createQueryRunner();
+    await queryRunner.connect();
+    await queryRunner.startTransaction();
+
+    try {
+      const user = await this.saveUserFormat(newUser, signupVerifyToken);
+      await queryRunner.manager.save(user);
+      await this.sendMemberJoinEmail(createUserDto.email, signupVerifyToken);
+      // throw new InternalServerErrorException(); // 일부러 에러를 발생시켜 본다
+      await queryRunner.commitTransaction();
+    } catch (e) {
+      // 에러가 발생하면 롤백
+      await queryRunner.rollbackTransaction();
+    } finally {
+      // 직접 생성한 QueryRunner는 해제시켜 주어야 함
+      await queryRunner.release();
+    }
 
     return { username: newUser.username };
   }
@@ -75,7 +91,7 @@ export class UsersService {
     return user !== undefined;
   }
 
-  private async saveUser(newUser: UserDto, signupVerifyToken: string) {
+  private async saveUserFormat(newUser: UserDto, signupVerifyToken: string) {
     const user = new UserEntity();
     user.username = newUser.username;
     user.email = newUser.email;
@@ -83,7 +99,7 @@ export class UsersService {
     user.nickname = newUser.nickname;
     user.gender = newUser.gender;
     user.signupVerifyToken = signupVerifyToken;
-    await this.usersRepository.save(user);
+    return user;
   }
 
   async sendMemberJoinEmail(email: string, signupVerifyToken: string) {
