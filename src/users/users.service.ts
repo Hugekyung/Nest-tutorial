@@ -29,10 +29,11 @@ export class UsersService {
     return user;
   }
 
-  async getUserInfo(userId: number): Promise<void> {
+  async getUserInfo(username: string) {
     // 1. userId를 가진 유저가 존재하는지 DB에서 확인하고 없다면 에러 처리
     // 2. 조회된 데이터를 UserInfo 타입으로 응답 Promise<UserInfo>
-    return;
+    const user = await this.usersRepository.findOne({ username });
+    return user;
   }
 
   async LoginUser(userLoginDto: UserLoginDto) {
@@ -42,10 +43,6 @@ export class UsersService {
   }
 
   async createUser(createUserDto: UserDto) {
-    if (this.usersArr.find((user) => user.username === createUserDto.username)) {
-      throw new HttpException('이미 동일한 유저이름이 존재합니다.', HttpStatus.FORBIDDEN);
-    }
-
     const checkedUserExist = await this.checkUserExists(createUserDto.email);
     if (checkedUserExist) {
       throw new HttpException('해당 email이 이미 존재합니다.', HttpStatus.FORBIDDEN);
