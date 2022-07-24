@@ -7,6 +7,7 @@ import { UserInfo } from './types/user.interface';
 import { EmailService } from '../email/email.service';
 import { UserLoginDto } from './dto/userLoginDto';
 import { UserEntity } from './user.entity';
+import { ICreateUserMessage } from 'src/utils/types/error.interface';
 
 @Injectable()
 export class UsersService {
@@ -69,21 +70,27 @@ export class UsersService {
     await queryRunner.connect();
     await queryRunner.startTransaction();
 
+    let result: ICreateUserMessage = {
+      successMessage: `Create ${newUser.username}'s Identity Successfully!`,
+    };
     try {
       const user = await this.saveUserFormat(newUser, signupVerifyToken);
       await queryRunner.manager.save(user);
       await this.sendMemberJoinEmail(createUserDto.email, signupVerifyToken);
-      // throw new InternalServerErrorException(); // 일부러 에러를 발생시켜 본다
       await queryRunner.commitTransaction();
     } catch (e) {
       // 에러가 발생하면 롤백
       await queryRunner.rollbackTransaction();
+      result = { errorMessage: e.message };
     } finally {
       // 직접 생성한 QueryRunner는 해제시켜 주어야 함
       await queryRunner.release();
+      if (result.errorMessage) {
+        return result;
+      }
     }
 
-    return { username: newUser.username };
+    return result;
   }
 
   private async checkUserExists(email: string) {

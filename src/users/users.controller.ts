@@ -12,6 +12,7 @@ import { UserDto } from './dto/credentialDto';
 import { VerifyEmailDto } from './dto/verifyEmailDto';
 import { UserLoginDto } from './dto/userLoginDto';
 import { UsersService } from './users.service';
+import { ICreateUserMessage } from 'src/utils/types/error.interface';
 
 @Controller('users')
 export class UsersController {
@@ -25,9 +26,9 @@ export class UsersController {
 
   @Post()
   @UsePipes(ValidationPipe)
-  async createUser(@Body() createUserDto: UserDto): Promise<string> {
-    const user = await this.userService.createUser(createUserDto);
-    return `Create ${user.username}'s Identity Successfully!`;
+  async createUser(@Body() createUserDto: UserDto): Promise<ICreateUserMessage> {
+    const result = await this.userService.createUser(createUserDto);
+    return result;
   }
 
   @Post('/email-verify')
