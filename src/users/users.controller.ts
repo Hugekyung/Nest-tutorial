@@ -3,7 +3,6 @@ import {
   Controller,
   Get,
   Param,
-  ParseIntPipe,
   Post,
   Query,
   UsePipes,
@@ -12,7 +11,6 @@ import {
 import { UserDto } from './dto/credentialDto';
 import { VerifyEmailDto } from './dto/verifyEmailDto';
 import { UserLoginDto } from './dto/userLoginDto';
-import { User } from './types/user.interface';
 import { UsersService } from './users.service';
 
 @Controller('users')
@@ -20,9 +18,9 @@ export class UsersController {
   constructor(private readonly userService: UsersService) {}
 
   @Get()
-  findAllUsers(): User[] {
-    const userList = this.userService.findAllUsers();
-    return userList;
+  findAllUsers() {
+    const users = this.userService.findAllUsers();
+    return users;
   }
 
   @Post()
@@ -43,8 +41,8 @@ export class UsersController {
     return await this.userService.LoginUser(userLoginDto);
   }
 
-  @Get('/:id')
-  async getUserInfo(@Param('id', ParseIntPipe) userId: number) {
-    return await this.userService.getUserInfo(userId);
+  @Get('/:username')
+  async getUserInfo(@Param('username') username: string) {
+    return await this.userService.getUserInfo(username);
   }
 }
