@@ -10,19 +10,17 @@ import { UserEntity } from './user.entity';
 
 @Injectable()
 export class UsersService {
-  private usersArr: User[] = [];
-
   constructor(
     @InjectRepository(UserEntity) private usersRepository: Repository<UserEntity>,
     private emailService: EmailService,
   ) {}
 
-  findAllUsers() {
-    return this.usersArr;
+  async findAllUsers() {
+    return await this.usersRepository.find();
   }
 
-  findUser(username: string) {
-    const user = this.usersArr.find((user) => user.username === username);
+  async findUser(username: string) {
+    const user = await this.usersRepository.findOne({ username });
     if (!user) {
       throw new HttpException('일치하는 유저가 없습니다.', HttpStatus.FORBIDDEN);
     }
@@ -32,8 +30,15 @@ export class UsersService {
   async getUserInfo(username: string) {
     // 1. userId를 가진 유저가 존재하는지 DB에서 확인하고 없다면 에러 처리
     // 2. 조회된 데이터를 UserInfo 타입으로 응답 Promise<UserInfo>
-    const user = await this.usersRepository.findOne({ username });
-    return user;
+    const foundUser = await this.usersRepository.findOne({ username });
+    if (!foundUser) {
+      throw new HttpException(
+        'username에 해당하는 유저가 존재하지 않습니다.',
+        HttpStatus.FORBIDDEN,
+      );
+    }
+
+    return foundUser;
   }
 
   async LoginUser(userLoginDto: UserLoginDto) {
@@ -91,43 +96,25 @@ export class UsersService {
     // 2. 바로 로그인 상태가 되도록 JWT를 발급
   }
 
-  updateUser(username: string, password: string, fieldToUpdate: Partial<UserInfo>) {
-    const existedUser = this.usersArr.find((user) => user.username === username);
-    if (!existedUser) {
-      throw new HttpException(
-        'username에 해당하는 유저가 존재하지 않습니다.',
-        HttpStatus.FORBIDDEN,
-      );
-    }
-
-    const correctPassword = this.usersArr.find(
-      (user) => user.username === username && user.password === password,
-    );
+  async updateUser(username: string, password: string, fieldToUpdate: Partial<UserInfo>) {
+    const foundUser = await this.getUserInfo(username);
+    const correctPassword = foundUser.password === password ? true : false;
     if (!correctPassword) {
       throw new HttpException('패스워드가 일치하지 않습니다.', HttpStatus.UNAUTHORIZED);
     }
 
-    this.usersArr.forEach((user) => {
-      if (user.username === username) {
-        user.password = fieldToUpdate.updatePassword ?? user.password;
-        user.nickname = fieldToUpdate.nickname ?? user.nickname;
-        user.gender = fieldToUpdate.gender ?? user.gender;
-      }
-    });
+    foundUser.password = fieldToUpdate.updatePassword ?? foundUser.password;
+    foundUser.nickname = fieldToUpdate.nickname ?? foundUser.nickname;
+    foundUser.gender = fieldToUpdate.gender ?? foundUser.gender;
   }
 
-  deleteUser(deleteWantedUser: UserDto) {
-    const matchedUser = this.usersArr.find(
-      (user) =>
-        user.username === deleteWantedUser.username && user.password === deleteWantedUser.password,
-    );
-
-    let newUserArr: User[];
-    if (matchedUser) {
-      newUserArr = this.usersArr.filter((user) => user.username !== deleteWantedUser.username);
-      this.usersArr = newUserArr;
-    } else {
-      throw new HttpException('일치하는 유저 정보가 없습니다.', HttpStatus.FORBIDDEN);
+  async deleteUser(deleteWantedUser: UserDto) {
+    const foundUser = await this.getUserInfo(deleteWantedUser.username);
+    const correctPassword = foundUser.password === deleteWantedUser.password ? true : false;
+    if (!correctPassword) {
+      throw new HttpException('패스워드가 일치하지 않습니다.', HttpStatus.UNAUTHORIZED);
     }
+
+    await this.usersRepository.remove(foundUser);
   }
 }
