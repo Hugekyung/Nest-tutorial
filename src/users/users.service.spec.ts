@@ -1,6 +1,7 @@
 import { HttpStatus } from '@nestjs/common';
 import { Test, TestingModule } from '@nestjs/testing';
-import { TypeOrmModule } from '@nestjs/typeorm';
+import { getRepositoryToken } from '@nestjs/typeorm';
+import { Connection } from 'typeorm';
 import { EmailService } from '../email/email.service';
 import { UserDto } from './dto/credentialDto';
 import { UserInfo } from './types/user.interface';
@@ -10,10 +11,24 @@ import { UsersService } from './users.service';
 describe('UsersService', () => {
   let service: UsersService;
 
+  class MockConnection {}
+  class MockUserRepository {
+    // Entity랑 Entity를 통해 DB에 접근하는 메소드들 Mocking필요
+    // Entity 메소드같은 경우에는 실제 데이터베이스 접근 대신 배열로 처리
+  }
+  // 트랜잭션을 위해 사용한 Connection도 Mocking 처리 필요
+
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
-      imports: [TypeOrmModule.forFeature([UserEntity])],
-      providers: [UsersService, EmailService],
+      providers: [
+        UsersService,
+        EmailService,
+        { provide: getRepositoryToken(UserEntity), useClass: MockUserRepository },
+        {
+          provide: Connection, // 이 부분 맞는지 확인 필요
+          useClass: MockConnection,
+        },
+      ],
     }).compile();
 
     const createUserDto: UserDto = {
