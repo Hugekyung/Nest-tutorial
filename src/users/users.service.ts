@@ -129,6 +129,8 @@ export class UsersService {
     foundUser.password = fieldToUpdate.updatePassword ?? foundUser.password;
     foundUser.nickname = fieldToUpdate.nickname ?? foundUser.nickname;
     foundUser.gender = fieldToUpdate.gender ?? foundUser.gender;
+
+    // 수정된 정보 db 업데이트
   }
 
   async deleteUser(deleteWantedUser: UserDto) {

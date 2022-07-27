@@ -13,6 +13,10 @@ describe('UsersService', () => {
 
   class MockConnection {}
   class MockUserRepository {
+    #data = [];
+    find() {}
+    findOne() {}
+    remove() {}
     // Entity랑 Entity를 통해 DB에 접근하는 메소드들 Mocking필요
     // Entity 메소드같은 경우에는 실제 데이터베이스 접근 대신 배열로 처리
   }
