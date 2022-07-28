@@ -93,7 +93,7 @@ export class UsersService {
     return result;
   }
 
-  private async checkUserExists(email: string) {
+  async checkUserExists(email: string) {
     const user = await this.usersRepository.findOne({ email });
     return user !== undefined;
   }

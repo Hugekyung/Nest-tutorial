@@ -90,7 +90,11 @@ describe('UsersService', () => {
   });
 
   describe('checkUserExists TEST', () => {
-    it('checkUserExists : 이미 등록된 이메일인 경우 true를 반환합니다.', () => {});
+    it('checkUserExists : 이미 등록된 이메일인 경우 true를 반환한다.', async () => {
+      const neededCheckEmail = 'test-user@example.com';
+      const res = await service.checkUserExists(neededCheckEmail);
+      expect(res).toBeTruthy();
+    });
   });
 
   describe('updateUser TEST', () => {
