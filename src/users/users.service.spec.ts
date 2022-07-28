@@ -27,7 +27,7 @@ describe('UsersService', () => {
       return this.#data;
     }
 
-    findOne({ where: { data } }) {
+    findOne({ data }) {
       const res = this.#data.find((user) => user.username === data || user.email === data);
       if (res) {
         return res;
