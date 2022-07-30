@@ -8,6 +8,11 @@ import { UserInfo } from './types/user.interface';
 import { UserEntity } from './user.entity';
 import { UsersService } from './users.service';
 
+interface IData {
+  username?: string;
+  email?: string;
+}
+
 describe('UsersService', () => {
   let service: UsersService;
 
@@ -27,12 +32,15 @@ describe('UsersService', () => {
       return this.#data;
     }
 
-    findOne({ data }) {
-      const res = this.#data.find((user) => user.username === data || user.email === data);
+    findOne(data: IData) {
+      console.log('받은 데이터 >>', data);
+      const res = this.#data.find(
+        (user) => user.username === data.username || user.email === data.email,
+      );
       if (res) {
         return res;
       }
-      return null;
+      return undefined;
     }
     // remove() {}
     // Entity랑 Entity를 통해 DB에 접근하는 메소드들 Mocking필요
@@ -66,55 +74,58 @@ describe('UsersService', () => {
     // service.createUser(createUserDto);
   });
 
-  // describe('createUser TEST', () => {
-  //   it('createUser : 유저 이름과 비밀번호를 받아 유저를 생성한다(리스트에 푸시한다).', async () => {
-  //     const res = await service.findAllUsers();
-  //     expect(res.length).toBe(1);
-  //     expect(service.findAllUsers()).toEqual([
-  //       {
-  //         username: 'test-user',
-  //         email: 'test-user@example.com',
-  //         password: 'test-password',
-  //         nickname: 'test-nickname',
-  //         gender: 'male',
-  //       },
-  //     ]);
-  //   });
+  describe('createUser TEST', () => {
+    // it('createUser : 유저 이름과 비밀번호를 받아 유저를 생성한다(리스트에 푸시한다).', async () => {
+    //   const res = await service.findAllUsers();
+    //   expect(res.length).toBe(1);
+    //   expect(res).toEqual([
+    //     {
+    //       username: 'test-user',
+    //       email: 'test-user@example.com',
+    //       password: 'test-password',
+    //       nickname: 'test-nickname',
+    //       gender: 'male',
+    //     },
+    //   ]);
+    // });
 
-  //   it('createUser : nickname과 gender 값이 RequestBody에 없다면 지정된 값으로 할당하여 유저를 생성한다.', async () => {
-  //     await service.createUser({
-  //       username: 'test-user-2',
-  //       email: 'test-user2@example.com',
-  //       password: 'test-password',
-  //     });
-  //     const username = 'test-user-2';
-  //     const user = await service.findUser(username);
-  //     expect(user.nickname).toEqual('unknown');
-  //     expect(user.gender).toEqual('none');
-  //   });
+    it('createUser : nickname과 gender 값이 RequestBody에 없다면 지정된 값으로 할당하여 유저를 생성한다.', async () => {
+      await service.createUser({
+        username: 'test-user-2',
+        email: 'test-user2@example.com',
+        password: 'test-password',
+      });
+      const res = await service.findAllUsers();
+      console.log('res >>', res);
 
-  //   it('createUser : email값이 중복될 경우 에러를 반환한다.', async () => {
-  //     try {
-  //       await service.createUser({
-  //         username: 'test-user-2',
-  //         email: 'test-user@example.com',
-  //         password: 'test-password',
-  //       });
-  //     } catch (error) {
-  //       expect(error.status).toBe(HttpStatus.FORBIDDEN);
-  //       expect(error.message).toEqual('해당 email이 이미 존재합니다.');
-  //     }
-  //   });
-  // });
-
-  describe('checkUserExists TEST', () => {
-    it('checkUserExists : 이미 등록된 이메일인 경우 true를 반환한다.', async () => {
-      const neededCheckEmail = 'test-user@example.com';
-      const res = await service.checkUserExists(neededCheckEmail);
-      expect(res).toBeTruthy();
+      const username = 'test-user-2';
+      const user = await service.findUser(username);
+      expect(user.nickname).toEqual('unknown');
+      expect(user.gender).toEqual('none');
     });
+
+    // it('createUser : email값이 중복될 경우 에러를 반환한다.', async () => {
+    //   try {
+    //     await service.createUser({
+    //       username: 'test-user-2',
+    //       email: 'test-user@example.com',
+    //       password: 'test-password',
+    //     });
+    //   } catch (error) {
+    //     expect(error.status).toBe(HttpStatus.FORBIDDEN);
+    //     expect(error.message).toEqual('해당 email이 이미 존재합니다.');
+    //   }
+    // });
   });
 
+  // describe('checkUserExists TEST', () => {
+  //   it('checkUserExists : 이미 등록된 이메일인 경우 true를 반환한다.', async () => {
+  //     const neededCheckEmail = 'test-user@example.com';
+  //     const res = await service.checkUserExists(neededCheckEmail);
+  //     expect(res).toBeTruthy();
+  //   });
+  // });
+  /////////////////////////////////
   // describe('updateUser TEST', () => {
   //   it('username, nickname과 gender 값을 인자로 받아 해당 유저 정보를 업데이트 한다', async () => {
   //     const username = 'test-user';

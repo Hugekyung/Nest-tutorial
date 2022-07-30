@@ -51,6 +51,7 @@ export class UsersService {
 
   async createUser(createUserDto: UserDto) {
     const checkedUserExist = await this.checkUserExists(createUserDto.email);
+    console.log('checkedUserExist >>', checkedUserExist);
     if (checkedUserExist) {
       throw new HttpException('해당 email이 이미 존재합니다.', HttpStatus.FORBIDDEN);
     }
@@ -94,6 +95,7 @@ export class UsersService {
   }
 
   async checkUserExists(email: string) {
+    console.log(email);
     const user = await this.usersRepository.findOne({ email });
     return user !== undefined;
   }
