@@ -11,4 +11,5 @@ export interface User extends UserInfo {
   username: string;
   email: string;
   password: string;
+  signupVerifyToken?: string;
 }
