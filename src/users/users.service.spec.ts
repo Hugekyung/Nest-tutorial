@@ -3,6 +3,7 @@ import { Test, TestingModule } from '@nestjs/testing';
 import { getRepositoryToken } from '@nestjs/typeorm';
 import { Connection, QueryRunner } from 'typeorm';
 import { EmailService } from '../email/email.service';
+import { UserDto } from './dto/credentialDto';
 // import { UserDto } from './dto/credentialDto';
 import { User, UserInfo } from './types/user.interface';
 import { UserEntity } from './user.entity';
@@ -16,6 +17,7 @@ interface IData {
 describe('UsersService', () => {
   let service: UsersService;
   let connection: Connection;
+  // const mockDB: UserEntity[] = []; // 테스트용 db 구현을 위한 array 배열을 어떻게 적용할지??
 
   const queryRunner = {
     manager: {},
@@ -48,7 +50,8 @@ describe('UsersService', () => {
   // 트랜잭션을 위해 사용한 Connection도 Mocking 처리 필요
 
   beforeEach(async () => {
-    Object.assign(queryRunner.manager, { save: jest.fn() }); // 3
+    const mockDB: UserEntity[] = [];
+    Object.assign(queryRunner.manager, { save: jest.fn((user: UserEntity) => mockDB.push(user)) }); // 3
     queryRunner.startTransaction = jest.fn();
     queryRunner.connect = jest.fn();
     queryRunner.commitTransaction = jest.fn();
