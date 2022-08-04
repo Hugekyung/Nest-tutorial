@@ -23,8 +23,6 @@ export async function saveWithQueryRunner(
   } finally {
     // 직접 생성한 QueryRunner는 해제시켜 주어야 함
     await queryRunner.release();
-    if (result.errorMessage) {
-      return result;
-    }
+    return result;
   }
 }
