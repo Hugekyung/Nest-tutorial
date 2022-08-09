@@ -6,13 +6,13 @@ import { UserDto } from './dto/credentialDto';
 import { UserInfo } from './types/user.interface';
 import { EmailService } from '../email/email.service';
 import { UserLoginDto } from './dto/userLoginDto';
-import { UserEntity } from './user.entity';
+import { User } from './user.entity';
 import { saveWithQueryRunner } from '../utils/db/transaction';
 
 @Injectable()
 export class UsersService {
   constructor(
-    @InjectRepository(UserEntity) private usersRepository: Repository<UserEntity>,
+    @InjectRepository(User) private usersRepository: Repository<User>,
     private emailService: EmailService,
     private connection: Connection,
   ) {}
@@ -80,7 +80,7 @@ export class UsersService {
   }
 
   private async saveUserFormat(newUser: UserDto, signupVerifyToken: string) {
-    const user = new UserEntity();
+    const user = new User();
     user.username = newUser.username;
     user.email = newUser.email;
     user.password = newUser.password;

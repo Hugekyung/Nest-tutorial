@@ -12,7 +12,7 @@ export class Post {
   @Column({ length: 255 })
   description: string;
 
-  @Column({ length: 30 })
+  @Column()
   createdAt: Date;
 
   @ManyToOne(() => User, (user) => user.posts)

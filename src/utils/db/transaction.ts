@@ -1,10 +1,10 @@
-import { UserEntity } from 'src/users/user.entity';
+import { User } from 'src/users/user.entity';
 import { ICreateUserMessage } from 'src/utils/types/error.interface';
 import { Connection } from 'typeorm';
 
 export async function saveWithQueryRunner(
   connection: Connection,
-  user: UserEntity,
+  user: User,
 ): Promise<ICreateUserMessage> {
   const queryRunner = connection.createQueryRunner();
   await queryRunner.connect();
