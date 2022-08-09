@@ -1,8 +1,9 @@
-import { Column, Entity, PrimaryGeneratedColumn, Unique } from 'typeorm';
+import { Post } from 'src/posts/post.entity';
+import { Column, Entity, OneToMany, PrimaryGeneratedColumn, Unique } from 'typeorm';
 
 @Entity('User')
 @Unique(['username', 'email'])
-export class UserEntity {
+export class User {
   @PrimaryGeneratedColumn()
   id: number;
 
@@ -23,4 +24,7 @@ export class UserEntity {
 
   @Column({ length: 60 })
   signupVerifyToken: string;
+
+  @OneToMany(() => Post, (posts) => posts.user)
+  posts: Post[];
 }
