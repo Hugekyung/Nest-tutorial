@@ -9,7 +9,7 @@ export class PostsController {
   @Get()
   postsList() {
     const posts = this.postsService.getAllPosts();
-    return { message: 'success!' };
+    return posts;
   }
 
   @Post()

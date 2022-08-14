@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { PostRepository } from 'src/repository/posts.repository';
 import { User } from 'src/users/user.entity';
@@ -29,23 +29,28 @@ export class PostsService {
   }
 
   async createPost(createPostDto: CreatePostDto) {
-    const user = await this.usersService.findUserById;
+    const user = await this.usersService.findUserById(createPostDto.userId);
+    if (!user) {
+      throw new HttpException('일치하는 유저가 없습니다.', HttpStatus.FORBIDDEN);
+    }
     // const newPost = {
     //   title: createPostDto.title,
     //   description: createPostDto.description,
     //   createdAt: Date.now(),
     //   user: createPostDto.userId,
     // };
-    const post = this.savePostFormat(createPostDto);
+    const post = await this.savePostFormat(createPostDto, user);
+    // console.log(post);
     const resultMessage = await saveDataWithQueryRunner(this.connection, post);
     return resultMessage;
   }
 
-  private async savePostFormat(createPostDto: CreatePostDto) {
+  private async savePostFormat(createPostDto: CreatePostDto, user: User) {
     const post = new Post();
     post.title = createPostDto.title;
     post.description = createPostDto.description;
     post.createdAt = new Date();
-    // post.user = createPostDto.userId;
+    post.user = user;
+    return post;
   }
 }
