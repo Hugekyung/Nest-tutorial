@@ -1,20 +1,19 @@
-import { User } from 'src/users/user.entity';
 import { ICreateUserMessage } from 'src/utils/types/error.interface';
 import { Connection } from 'typeorm';
 
-export async function saveWithQueryRunner(
+export async function saveDataWithQueryRunner(
   connection: Connection,
-  user: User,
+  data,
 ): Promise<ICreateUserMessage> {
   const queryRunner = connection.createQueryRunner();
   await queryRunner.connect();
   await queryRunner.startTransaction();
 
   let result: ICreateUserMessage = {
-    successMessage: `Create ${user.username}'s Identity Successfully!`,
+    successMessage: 'Create Items Successfully!',
   };
   try {
-    await queryRunner.manager.save(user);
+    await queryRunner.manager.save(data);
     await queryRunner.commitTransaction();
   } catch (e) {
     // 에러가 발생하면 롤백

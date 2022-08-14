@@ -7,7 +7,7 @@ import { UserInfo } from './types/user.interface';
 import { EmailService } from '../email/email.service';
 import { UserLoginDto } from './dto/userLoginDto';
 import { User } from './user.entity';
-import { saveWithQueryRunner } from '../utils/db/transaction';
+import { saveDataWithQueryRunner } from '../utils/db/transaction';
 
 @Injectable()
 export class UsersService {
@@ -67,7 +67,7 @@ export class UsersService {
     }
 
     const user = await this.saveUserFormat(newUser, signupVerifyToken);
-    const resultMessage = await saveWithQueryRunner(this.connection, user);
+    const resultMessage = await saveDataWithQueryRunner(this.connection, user);
     // if (resultMessage.successMessage) {
     //   await this.sendMemberJoinEmail(user.email, user.signupVerifyToken);
     // }
