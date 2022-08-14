@@ -1,4 +1,4 @@
-import { Body, Controller, Get, Post } from '@nestjs/common';
+import { Body, Controller, Get, Param, Post } from '@nestjs/common';
 import { CreatePostDto } from './dto/createPostDto';
 import { PostsService } from './posts.service';
 
@@ -7,9 +7,15 @@ export class PostsController {
   constructor(private readonly postsService: PostsService) {}
 
   @Get()
-  postsList() {
+  getPostsList() {
     const posts = this.postsService.getAllPosts();
     return posts;
+  }
+
+  @Get(':id')
+  getPost(@Param('id') postId: number) {
+    const post = this.postsService.getPost(postId);
+    return post;
   }
 
   @Post()

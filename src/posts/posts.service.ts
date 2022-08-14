@@ -8,13 +8,6 @@ import { Connection } from 'typeorm';
 import { CreatePostDto } from './dto/createPostDto';
 import { Post } from './post.entity';
 
-interface InewPost {
-  title: string;
-  description: string;
-  createdAt: Date;
-  user: User;
-}
-
 @Injectable()
 export class PostsService {
   constructor(
@@ -33,14 +26,8 @@ export class PostsService {
     if (!user) {
       throw new HttpException('일치하는 유저가 없습니다.', HttpStatus.FORBIDDEN);
     }
-    // const newPost = {
-    //   title: createPostDto.title,
-    //   description: createPostDto.description,
-    //   createdAt: Date.now(),
-    //   user: createPostDto.userId,
-    // };
+
     const post = await this.savePostFormat(createPostDto, user);
-    // console.log(post);
     const resultMessage = await saveDataWithQueryRunner(this.connection, post);
     return resultMessage;
   }
