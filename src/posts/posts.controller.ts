@@ -1,4 +1,4 @@
-import { Body, Controller, Get, Param, Post } from '@nestjs/common';
+import { Body, Controller, Get, Param, ParseIntPipe, Post } from '@nestjs/common';
 import { CreatePostDto } from './dto/createPostDto';
 import { PostsService } from './posts.service';
 
@@ -13,7 +13,7 @@ export class PostsController {
   }
 
   @Get(':id')
-  getPost(@Param('id') postId: number) {
+  getPost(@Param('id', ParseIntPipe) postId: number) {
     const post = this.postsService.getPost(postId);
     return post;
   }

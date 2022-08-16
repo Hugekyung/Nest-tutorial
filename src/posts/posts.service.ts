@@ -21,6 +21,10 @@ export class PostsService {
     return await this.postRepository.findAll();
   }
 
+  async getPost(postId: number) {
+    return await this.postRepository.findById(postId);
+  }
+
   async createPost(createPostDto: CreatePostDto) {
     const user = await this.usersService.findUserById(createPostDto.userId);
     if (!user) {
