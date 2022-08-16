@@ -4,9 +4,7 @@ import { getRepositoryToken } from '@nestjs/typeorm';
 import { Connection, QueryRunner } from 'typeorm';
 import { EmailService } from '../email/email.service';
 import { UserDto } from './dto/credentialDto';
-// import { UserDto } from './dto/credentialDto';
-import { User, UserInfo } from './types/user.interface';
-import { UserEntity } from './user.entity';
+import { User } from './user.entity';
 import { UsersService } from './users.service';
 
 interface IData {
@@ -50,8 +48,8 @@ describe('UsersService', () => {
   // 트랜잭션을 위해 사용한 Connection도 Mocking 처리 필요
 
   beforeEach(async () => {
-    const mockDB: UserEntity[] = [];
-    Object.assign(queryRunner.manager, { save: jest.fn((user: UserEntity) => mockDB.push(user)) }); // 3
+    const mockDB: User[] = [];
+    Object.assign(queryRunner.manager, { save: jest.fn((user: User) => mockDB.push(user)) }); // 3
     queryRunner.startTransaction = jest.fn();
     queryRunner.connect = jest.fn();
     queryRunner.commitTransaction = jest.fn();
@@ -62,7 +60,7 @@ describe('UsersService', () => {
       providers: [
         UsersService,
         EmailService,
-        { provide: getRepositoryToken(UserEntity), useClass: MockUserRepository },
+        { provide: getRepositoryToken(User), useClass: MockUserRepository },
         {
           provide: Connection, // 이 부분 맞는지 확인 필요
           useClass: MockConnection,
