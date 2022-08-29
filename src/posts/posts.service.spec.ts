@@ -29,6 +29,7 @@ describe('PostsService', () => {
       description: 'test-description',
       userId: 1,
     };
+    expect(postDB).toEqual([]);
     // service.createPost = jest.fn((postData) => postDB.push(postData)).mockResolvedValue()
   });
 });

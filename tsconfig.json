@@ -12,6 +12,7 @@
     "baseUrl": "./",
     "paths": {
       "@root/*": ["./src/*"],
+      "@repo/*": ["./src/repository/*"],
       "@auth/*": ["./src/auth/*"]
     },
     "incremental": true,
