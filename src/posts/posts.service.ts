@@ -1,6 +1,7 @@
 import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { PostRepository } from '@repo/posts.repository';
+// import { PostRepository } from '@root/repository/posts.repository';
+import { PostRepository } from '@src/repository/posts.repository';
 import { User } from 'src/users/user.entity';
 import { UsersService } from 'src/users/users.service';
 import { saveDataWithQueryRunner } from 'src/utils/db/transaction';
