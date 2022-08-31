@@ -1,13 +1,12 @@
 import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-// import { PostRepository } from '@root/repository/posts.repository';
-import { PostRepository } from '@src/repository/posts.repository';
-import { User } from 'src/users/user.entity';
-import { UsersService } from 'src/users/users.service';
-import { saveDataWithQueryRunner } from 'src/utils/db/transaction';
 import { Connection } from 'typeorm';
-import { CreatePostDto } from './dto/createPostDto';
+import { PostRepository } from '../repository/posts.repository';
+import { UsersService } from '../users/users.service';
 import { Post } from './post.entity';
+import { User } from '../users/user.entity';
+import { CreatePostDto } from './dto/createPostDto';
+import { saveDataWithQueryRunner } from '../utils/db/transaction';
 
 @Injectable()
 export class PostsService {

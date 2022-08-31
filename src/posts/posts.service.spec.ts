@@ -1,6 +1,5 @@
 import { HttpStatus } from '@nestjs/common';
 import { Test, TestingModule } from '@nestjs/testing';
-import { getRepositoryToken } from '@nestjs/typeorm';
 import { CreatePostDto } from './dto/createPostDto';
 import { Post } from './post.entity';
 import { PostsService } from './posts.service';
@@ -29,6 +28,7 @@ describe('PostsService', () => {
       description: 'test-description',
       userId: 1,
     };
+    console.log(postDB);
     expect(postDB).toEqual([]);
     // service.createPost = jest.fn((postData) => postDB.push(postData)).mockResolvedValue()
   });

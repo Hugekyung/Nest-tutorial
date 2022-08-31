@@ -12,8 +12,6 @@
     "baseUrl": "./",
     "paths": {
       "@src/*": ["src/*"]
-      // "@repo/*": ["./src/repository/*"],
-      // "@auth/*": ["./src/auth/*"]
     },
     "incremental": true,
     "skipLibCheck": true,
