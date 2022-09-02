@@ -93,7 +93,7 @@ describe('UsersService', () => {
       jest.spyOn(queryRunner.manager, 'save');
       const res = await service.createUser(willSavedUser);
 
-      expect(res.successMessage).toEqual("Create test-user-2's Identity Successfully!");
+      expect(res.successMessage).toEqual('Create Items Successfully!');
       expect(queryRunner.manager.save).toHaveBeenCalledTimes(1);
       expect(queryRunner.commitTransaction).toHaveBeenCalledTimes(1);
       expect(queryRunner.release).toHaveBeenCalledTimes(1);
