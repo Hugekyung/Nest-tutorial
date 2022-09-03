@@ -10,12 +10,6 @@ import { UserRepository } from '../repository/users.repository';
 
 describe('PostsService', () => {
   let service: PostsService;
-  let postDB: Post[];
-  const postData: CreatePostDto = {
-    title: 'test-post',
-    description: 'test-description',
-    userId: 1,
-  };
 
   const queryRunner = {
     manager: {},
@@ -29,8 +23,12 @@ describe('PostsService', () => {
   }
 
   class MockPostRepository {
-    postDB = [postData];
-    findAll = () => postDB;
+    testData = {
+      title: 'test-post',
+      description: 'test-description',
+      userId: 1,
+    };
+    findAll = jest.fn(() => this.testData);
   }
 
   class MockUserRepository {}
@@ -55,7 +53,11 @@ describe('PostsService', () => {
   describe('getAllPosts TEST', () => {
     it('getAllPosts 함수를 호출하면 전체 Post를 조회한다.', async () => {
       const res = await service.getAllPosts();
-      expect(res).toEqual([]);
+      expect(res).toEqual({
+        title: 'test-post',
+        description: 'test-description',
+        userId: 1,
+      });
     });
   });
 });
