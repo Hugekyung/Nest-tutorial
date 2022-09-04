@@ -23,12 +23,18 @@ describe('PostsService', () => {
   }
 
   class MockPostRepository {
-    testData = {
-      title: 'test-post',
-      description: 'test-description',
-      userId: 1,
-    };
-    findAll = jest.fn(() => this.testData);
+    postDB = [
+      {
+        id: 1,
+        title: 'test-post',
+        description: 'test-description',
+        userId: 1,
+      },
+    ];
+    findAll = jest.fn(() => this.postDB);
+    findById = jest.fn((postId: number) => {
+      return this.postDB.filter((post) => post.id === postId);
+    });
   }
 
   class MockUserRepository {}
@@ -53,11 +59,29 @@ describe('PostsService', () => {
   describe('getAllPosts TEST', () => {
     it('getAllPosts 함수를 호출하면 전체 Post를 조회한다.', async () => {
       const res = await service.getAllPosts();
-      expect(res).toEqual({
-        title: 'test-post',
-        description: 'test-description',
-        userId: 1,
-      });
+      expect(res).toEqual([
+        {
+          id: 1,
+          title: 'test-post',
+          description: 'test-description',
+          userId: 1,
+        },
+      ]);
+    });
+  });
+
+  describe('getPost TEST', () => {
+    it('postId와 함께 getPost 함수를 호출하면 해당 post를 조회한다.', async () => {
+      const postId = 1;
+      const res = await service.getPost(postId);
+      expect(res).toEqual([
+        {
+          id: 1,
+          title: 'test-post',
+          description: 'test-description',
+          userId: 1,
+        },
+      ]);
     });
   });
 });
