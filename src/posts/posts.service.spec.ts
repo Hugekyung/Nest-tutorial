@@ -83,5 +83,11 @@ describe('PostsService', () => {
         },
       ]);
     });
+
+    it('DB에 존재하지 않는 postId를 담아 호출하면 빈 배열을 반환한다.', async () => {
+      const postId = 2;
+      const res = await service.getPost(postId);
+      expect(res).toEqual([]);
+    });
   });
 });
