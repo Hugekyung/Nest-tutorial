@@ -7,6 +7,7 @@ import { CreatePostDto } from './dto/createPostDto';
 import { Post } from './post.entity';
 import { PostsService } from './posts.service';
 import { UserRepository } from '../repository/users.repository';
+import { saveDataWithQueryRunner } from '../utils/db/transaction';
 
 describe('PostsService', () => {
   let service: PostsService;
@@ -37,7 +38,21 @@ describe('PostsService', () => {
     });
   }
 
-  class MockUserRepository {}
+  class MockUserRepository {
+    userDB = [
+      {
+        id: 1,
+        username: 'test-user',
+        email: 'test-user@example.com',
+        password: 'test-password',
+        nickname: 'test-nickname',
+        gender: 'male',
+      },
+    ];
+    findUserById = jest.fn((userId) => {
+      return this.userDB.filter((user) => user.id === userId);
+    });
+  }
 
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
@@ -88,6 +103,18 @@ describe('PostsService', () => {
       const postId = 2;
       const res = await service.getPost(postId);
       expect(res).toEqual([]);
+    });
+  });
+
+  describe('createPost TEST', () => {
+    it('createPostDto를 인자로 담아 함수를 호출하면 successMessage를 반환한다.', async () => {
+      const createPostDto = {
+        title: 'test title',
+        description: 'test',
+        userId: 1,
+      };
+      const res = await service.createPost(createPostDto);
+      expect(res.successMessage).toEqual('Create Items Successfully!');
     });
   });
 });
