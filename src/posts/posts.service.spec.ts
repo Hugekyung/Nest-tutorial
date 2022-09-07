@@ -11,6 +11,7 @@ import { saveDataWithQueryRunner } from '../utils/db/transaction';
 
 describe('PostsService', () => {
   let service: PostsService;
+  let connection: Connection;
 
   const queryRunner = {
     manager: {},
@@ -68,6 +69,7 @@ describe('PostsService', () => {
     }).compile();
 
     service = module.get<PostsService>(PostsService);
+    connection = module.get<Connection>(Connection);
     // service.createPost(createPostDto);
   });
 
@@ -113,6 +115,8 @@ describe('PostsService', () => {
         description: 'test',
         userId: 1,
       };
+      // const queryRunner = connection.createQueryRunner();
+      // jest.spyOn(queryRunner.manager, 'save');
       const res = await service.createPost(createPostDto);
       expect(res.successMessage).toEqual('Create Items Successfully!');
     });
