@@ -8,11 +8,12 @@ import { EmailService } from '../email/email.service';
 import { UserLoginDto } from './dto/userLoginDto';
 import { User } from './user.entity';
 import { saveDataWithQueryRunner } from '../utils/db/transaction';
+import { UserRepository } from '../repository/users.repository';
 
 @Injectable()
 export class UsersService {
   constructor(
-    @InjectRepository(User) private usersRepository: Repository<User>,
+    @InjectRepository(UserRepository) private usersRepository: UserRepository,
     private emailService: EmailService,
     private connection: Connection,
   ) {}

@@ -8,9 +8,11 @@ import { Post } from './post.entity';
 import { PostsService } from './posts.service';
 import { UserRepository } from '../repository/users.repository';
 import { saveDataWithQueryRunner } from '../utils/db/transaction';
+import { UsersService } from '../users/users.service';
 
 describe('PostsService', () => {
   let service: PostsService;
+  let userService: UsersService;
   let connection: Connection;
 
   const queryRunner = {
@@ -57,8 +59,10 @@ describe('PostsService', () => {
 
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
+      imports: [UsersService, UserRepository],
       providers: [
         PostsService,
+        UsersService,
         { provide: getRepositoryToken(PostRepository), useClass: MockPostRepository },
         { provide: getRepositoryToken(UserRepository), useClass: MockUserRepository },
         {
@@ -69,6 +73,7 @@ describe('PostsService', () => {
     }).compile();
 
     service = module.get<PostsService>(PostsService);
+    userService = module.get<UsersService>(UsersService);
     connection = module.get<Connection>(Connection);
     // service.createPost(createPostDto);
   });
@@ -108,17 +113,32 @@ describe('PostsService', () => {
     });
   });
 
-  describe('createPost TEST', () => {
-    it('createPostDto를 인자로 담아 함수를 호출하면 successMessage를 반환한다.', async () => {
-      const createPostDto = {
-        title: 'test title',
+  // describe('createPost TEST', () => {
+  //   it('createPostDto를 인자로 담아 함수를 호출하면 successMessage를 반환한다.', async () => {
+  //     const createPostDto = {
+  //       title: 'test title',
+  //       description: 'test',
+  //       userId: 1,
+  //     };
+  // const queryRunner = connection.createQueryRunner();
+  // jest.spyOn(queryRunner.manager, 'save');
+  //     const res = await service.createPost(createPostDto);
+  //     expect(res.successMessage).toEqual('Create Items Successfully!');
+  //   });
+  // });
+
+  describe('savePostFormat TEST', () => {
+    it('createPostDto 데이터를 담아 요청하면 post 객체를 반환한다.', async () => {
+      const createPostDto: CreatePostDto = {
+        title: 'test-post',
         description: 'test',
         userId: 1,
       };
-      // const queryRunner = connection.createQueryRunner();
-      // jest.spyOn(queryRunner.manager, 'save');
-      const res = await service.createPost(createPostDto);
-      expect(res.successMessage).toEqual('Create Items Successfully!');
+      const userId = 1;
+      const user = await userService.findUserById(userId);
+      const res = await service.savePostFormat(createPostDto, user);
+      console.log(res);
+      expect(res).toEqual({});
     });
   });
 });

@@ -1,6 +1,7 @@
 import { HttpStatus } from '@nestjs/common';
 import { Test, TestingModule } from '@nestjs/testing';
 import { getRepositoryToken } from '@nestjs/typeorm';
+import { UserRepository } from '../repository/users.repository';
 import { Connection, QueryRunner } from 'typeorm';
 import { EmailService } from '../email/email.service';
 import { UserDto } from './dto/credentialDto';
@@ -57,6 +58,7 @@ describe('UsersService', () => {
     queryRunner.release = jest.fn();
 
     const module: TestingModule = await Test.createTestingModule({
+      imports: [UserRepository],
       providers: [
         UsersService,
         EmailService,

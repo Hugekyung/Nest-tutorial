@@ -38,7 +38,7 @@ export class PostsService {
     return resultMessage;
   }
 
-  private async savePostFormat(createPostDto: CreatePostDto, user: User) {
+  async savePostFormat(createPostDto: CreatePostDto, user: User) {
     const post = new Post();
     post.title = createPostDto.title;
     post.description = createPostDto.description;
