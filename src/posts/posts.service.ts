@@ -7,7 +7,6 @@ import { Post } from './post.entity';
 import { User } from '../users/user.entity';
 import { CreatePostDto } from './dto/createPostDto';
 import { saveDataWithQueryRunner } from '../utils/db/transaction';
-import { UserRepository } from '../repository/users.repository';
 
 @Injectable()
 export class PostsService {
@@ -15,8 +14,7 @@ export class PostsService {
     @InjectRepository(PostRepository)
     private readonly postRepository: PostRepository,
     private connection: Connection,
-    @InjectRepository(UserRepository)
-    private usersService: UsersService,
+    private readonly usersService: UsersService,
   ) {}
 
   async getAllPosts() {

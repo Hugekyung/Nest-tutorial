@@ -13,21 +13,22 @@ import { UserRepository } from '../repository/users.repository';
 @Injectable()
 export class UsersService {
   constructor(
-    @InjectRepository(UserRepository) private usersRepository: UserRepository,
+    @InjectRepository(UserRepository)
+    private readonly userRepository: UserRepository,
     private emailService: EmailService,
     private connection: Connection,
   ) {}
 
   async findAllUsers() {
-    return await this.usersRepository.find();
+    return await this.userRepository.findAll();
   }
 
   async findUserById(userId: number) {
-    return await this.usersRepository.findOne({ id: userId });
+    return await this.userRepository.findUserById(userId);
   }
 
   async findUser(username: string) {
-    const user = await this.usersRepository.findOne({ username });
+    const user = await this.userRepository.findUserByName(username);
     if (!user) {
       throw new HttpException('일치하는 유저가 없습니다.', HttpStatus.FORBIDDEN);
     }
@@ -37,7 +38,7 @@ export class UsersService {
   async getUserInfo(username: string) {
     // 1. userId를 가진 유저가 존재하는지 DB에서 확인하고 없다면 에러 처리
     // 2. 조회된 데이터를 UserInfo 타입으로 응답 Promise<UserInfo>
-    const foundUser = await this.usersRepository.findOne({ username });
+    const foundUser = await this.userRepository.findUserByName(username);
     if (!foundUser) {
       throw new HttpException(
         'username에 해당하는 유저가 존재하지 않습니다.',
@@ -80,7 +81,7 @@ export class UsersService {
   }
 
   async checkUserExists(email: string) {
-    const user = await this.usersRepository.findOne({ email });
+    const user = await this.userRepository.findUserByEmail(email);
     return user !== undefined;
   }
 
@@ -126,6 +127,6 @@ export class UsersService {
       throw new HttpException('패스워드가 일치하지 않습니다.', HttpStatus.UNAUTHORIZED);
     }
 
-    await this.usersRepository.remove(foundUser);
+    await this.userRepository.removeUser(foundUser);
   }
 }
