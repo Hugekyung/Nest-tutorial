@@ -134,11 +134,13 @@ describe('PostsService', () => {
         description: 'test',
         userId: 1,
       };
+      // userService.findUserById = jest.fn().mockResolvedValue(() => {});
       const userId = 1;
       const user = await userService.findUserById(userId);
-      const res = await service.savePostFormat(createPostDto, user);
-      console.log(res);
-      expect(res).toEqual({});
+      console.log(user);
+      // const res = await service.savePostFormat(createPostDto, user);
+      // console.log(res);
+      // expect(res).toEqual({});
     });
   });
 });

@@ -42,6 +42,16 @@ describe('UsersService', () => {
       // }
       // return undefined;
     }
+
+    // findUserByEamil = jest.fn((email: string) => {
+    //   return {
+    //     username: 'test-user',
+    //     email: 'test-user@example.com',
+    //     password: 'test-password',
+    //     nickname: 'test-nickname',
+    //     gender: 'male',
+    //   };
+    // });
     // remove() {}
     // Entity랑 Entity를 통해 DB에 접근하는 메소드들 Mocking필요
     // Entity 메소드같은 경우에는 실제 데이터베이스 접근 대신 배열로 처리
@@ -62,7 +72,7 @@ describe('UsersService', () => {
       providers: [
         UsersService,
         EmailService,
-        { provide: getRepositoryToken(User), useClass: MockUserRepository },
+        { provide: getRepositoryToken(UserRepository), useClass: MockUserRepository },
         {
           provide: Connection, // 이 부분 맞는지 확인 필요
           useClass: MockConnection,
@@ -93,6 +103,7 @@ describe('UsersService', () => {
       };
       const queryRunner = connection.createQueryRunner();
       jest.spyOn(queryRunner.manager, 'save');
+      service.checkUserExists = jest.fn().mockResolvedValue(false);
       const res = await service.createUser(willSavedUser);
 
       expect(res.successMessage).toEqual('Create Items Successfully!');
