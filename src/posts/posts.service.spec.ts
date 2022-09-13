@@ -1,6 +1,6 @@
 import { HttpStatus } from '@nestjs/common';
 import { Test, TestingModule } from '@nestjs/testing';
-import { getRepositoryToken } from '@nestjs/typeorm';
+import { getRepositoryToken, TypeOrmModule } from '@nestjs/typeorm';
 import { PostRepository } from '../repository/posts.repository';
 import { Connection, QueryRunner } from 'typeorm';
 import { CreatePostDto } from './dto/createPostDto';
@@ -41,30 +41,30 @@ describe('PostsService', () => {
     });
   }
 
-  class MockUserRepository {
-    userDB = [
-      {
-        id: 1,
-        username: 'test-user',
-        email: 'test-user@example.com',
-        password: 'test-password',
-        nickname: 'test-nickname',
-        gender: 'male',
-      },
-    ];
-    findUserById = jest.fn((userId) => {
-      return this.userDB.filter((user) => user.id === userId);
-    });
-  }
+  // class MockUserRepository {
+  //   userDB = [
+  //     {
+  //       id: 1,
+  //       username: 'test-user',
+  //       email: 'test-user@example.com',
+  //       password: 'test-password',
+  //       nickname: 'test-nickname',
+  //       gender: 'male',
+  //     },
+  //   ];
+  //   findUserById = jest.fn((userId) => {
+  //     return this.userDB.filter((user) => user.id === userId);
+  //   });
+  // }
 
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
-      imports: [UsersService, UserRepository],
+      imports: [UsersService],
       providers: [
         PostsService,
         UsersService,
         { provide: getRepositoryToken(PostRepository), useClass: MockPostRepository },
-        { provide: getRepositoryToken(UserRepository), useClass: MockUserRepository },
+        // { provide: getRepositoryToken(UserRepository), useClass: MockUserRepository },
         {
           provide: Connection, // 이 부분 맞는지 확인 필요
           useClass: MockConnection,
