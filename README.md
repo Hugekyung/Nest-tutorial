@@ -1,6 +1,7 @@
 # Nest-tutorial
 
 - Nest 공식문서 튜토리얼을 보면서 Nest를 학습하는 레포입니다.
+- Jest 기반 테스트 코드 작성을 함께 진행합니다.
 
 ### DTO
 
