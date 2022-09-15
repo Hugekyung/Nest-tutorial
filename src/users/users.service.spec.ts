@@ -4,7 +4,6 @@ import { getRepositoryToken } from '@nestjs/typeorm';
 import { UserRepository } from '../repository/users.repository';
 import { Connection, QueryRunner } from 'typeorm';
 import { EmailService } from '../email/email.service';
-import { UserDto } from './dto/credentialDto';
 import { User } from './user.entity';
 import { UsersService } from './users.service';
 

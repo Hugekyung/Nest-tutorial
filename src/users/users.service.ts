@@ -1,6 +1,6 @@
-import { Injectable, HttpStatus, HttpException, Inject } from '@nestjs/common';
+import { Injectable, HttpStatus, HttpException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Connection, Repository } from 'typeorm';
+import { Connection } from 'typeorm';
 import { v4 as uuidV4 } from 'uuid';
 import { UserDto } from './dto/credentialDto';
 import { UserInfo } from './types/user.interface';
