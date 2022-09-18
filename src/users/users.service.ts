@@ -36,8 +36,6 @@ export class UsersService {
   }
 
   async getUserInfo(username: string) {
-    // 1. userId를 가진 유저가 존재하는지 DB에서 확인하고 없다면 에러 처리
-    // 2. 조회된 데이터를 UserInfo 타입으로 응답 Promise<UserInfo>
     const foundUser = await this.userRepository.findUserByName(username);
     if (!foundUser) {
       throw new HttpException(
