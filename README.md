@@ -95,3 +95,9 @@ findOne(@Param('id', ParseIntPipe) id: number) {
     "error": "Bad Request"
 }
 ```
+
+<br/>
+
+### Hot Reload
+
+- webpack HMR(Hot-Module Replacement)을 통해 변경사항이 발생할 때마다 프로젝트를 컴파일 하는 방식 대신 빠르게 서버를 시작할 수 있게 도와준다.
