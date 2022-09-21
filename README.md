@@ -101,3 +101,12 @@ findOne(@Param('id', ParseIntPipe) id: number) {
 ### Hot Reload
 
 - webpack HMR(Hot-Module Replacement)을 통해 변경사항이 발생할 때마다 프로젝트를 컴파일 하는 방식 대신 빠르게 서버를 시작할 수 있게 도와준다.
+
+### 유용한 커맨드
+
+- Nest에서 제공하는 유용한 커맨드
+- controller, service, module을 포함해 CRUD API를 개발하기 위한 기본적인 틀을 제공한다.
+
+```bash
+nest g res users
+```

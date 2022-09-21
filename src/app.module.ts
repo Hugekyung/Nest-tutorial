@@ -5,9 +5,10 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { typeORMConfig } from './configs/typeorm.config';
 import { PostsModule } from './posts/posts.module';
 import { LoggerMiddleware } from 'middlewares/logger.middleware';
+import { TestApiModule } from './test-api/test-api.module';
 
 @Module({
-  imports: [TypeOrmModule.forRoot(typeORMConfig), UsersModule, EmailModule, PostsModule],
+  imports: [TypeOrmModule.forRoot(typeORMConfig), UsersModule, EmailModule, PostsModule, TestApiModule],
   providers: [],
 })
 export class AppModule implements NestModule {
