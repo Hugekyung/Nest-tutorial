@@ -110,3 +110,21 @@ findOne(@Param('id', ParseIntPipe) id: number) {
 ```bash
 nest g res users
 ```
+
+### Guard
+
+- 권한을 부여하기 위한 미들웨어로서 모든 미들웨어가 동작한 뒤, 인터셉터나 파이프 이전에 실행한다.
+- guard 사용 예제
+
+```js
+import { Injectable, CanActivate, ExecutionContext } from '@nestjs/common';
+import { Observable } from 'rxjs';
+
+@Injectable()
+export class AuthGuard implements CanActivate {
+  canActivate(context: ExecutionContext): boolean | Promise<boolean> | Observable<boolean> {
+    const request = context.switchToHttp().getRequest();
+    return validateRequest(request);
+  }
+}
+```
