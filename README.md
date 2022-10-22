@@ -138,3 +138,22 @@ export class RolesGuard implements CanActivate {
 ```
 
 - 파이프나 인터셉트 등과 같이 Guard 역시 전역, 컨트롤러, 단일 핸들러 레벨에 각각 적용 가능하다.
+
+```js
+// 전역 레벨
+const app = await NestFactory.create(AppModule);
+app.useGlobalGuards(new RolesGuard());
+
+// 컨트롤러 레벨
+@Controller('cats')
+@UseGuards(new RolesGuard())
+export class CatsController {}
+
+// 핸들러 레벨
+@Post()
+@SetMetadata('roles', ['admin'])
+async create(@Body() createCatDto: CreateCatDto) {
+  this.catsService.create(createCatDto);
+}
+
+```
