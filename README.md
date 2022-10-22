@@ -114,7 +114,7 @@ nest g res users
 ### Guard
 
 - 권한을 부여하기 위한 미들웨어로서 모든 미들웨어가 동작한 뒤, 인터셉터나 파이프 이전에 실행한다.
-- guard 사용 예제
+- guard 기본 사용 예제
 
 ```js
 import { Injectable, CanActivate, ExecutionContext } from '@nestjs/common';
@@ -127,4 +127,14 @@ export class AuthGuard implements CanActivate {
     return validateRequest(request);
   }
 }
+
+// 역할 기반 인증 예제
+@Injectable()
+export class RolesGuard implements CanActivate {
+  canActivate(context: ExecutionContext): boolean | Promise<boolean> | Observable<boolean> {
+    return true;
+  }
+}
 ```
+
+- 파이프나 인터셉트 등과 같이 Guard 역시 전역, 컨트롤러, 단일 핸들러 레벨에 각각 적용 가능하다.
