@@ -156,4 +156,12 @@ async create(@Body() createCatDto: CreateCatDto) {
   this.catsService.create(createCatDto);
 }
 
+// 핸들러 레벨 - SetMetaData 기반으로 @Role 데코레이터를 만들어 사용하는 방식을 권장함.
+@Post()
+@Roles('admin')
+async create(@Body() createCatDto: CreateCatDto) {
+  this.catsService.create(createCatDto);
+}
+
+
 ```
