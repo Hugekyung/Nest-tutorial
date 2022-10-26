@@ -165,3 +165,20 @@ async create(@Body() createCatDto: CreateCatDto) {
 
 
 ```
+
+<br/>
+
+### nest-cli.json 파일
+
+- Nest 프로젝트를 구성, 구축 및 배포하는데 필요한 메타데이터를 `nest-cli.json` 파일에 보관한다.
+- 해당 파일에서의 최상위 속성은 아래와 같다.
+
+```json
+"collection": 구성 요소를 생성하는 데 사용되는 회로도 컬렉션의 포인트; 일반적으로 이 값을 변경하면 안 됩니다.
+"sourceRoot": 표준 모드 구조의 단일 프로젝트 또는 모노레포 모드 구조 의 기본 프로젝트 에 대한 소스 코드의 루트를 가리킵니다.
+"compilerOptions": 컴파일러 옵션을 지정하는 키와 옵션 설정을 지정하는 값이 있는 맵. 아래 세부 정보 참조
+"generateOptions": 전역 생성 옵션을 지정하는 키와 옵션 설정을 지정하는 값이 있는 맵. 아래 세부 정보 참조
+"monorepo": (monorepo 전용) monorepo 모드 구조의 경우 이 값은 항상true
+"root": (monorepo 전용) 기본 프로젝트 의 프로젝트 루트를 가리킵니다.
+
+```
