@@ -53,6 +53,10 @@ export class UsersService {
     // 2. JWT를 발급
   }
 
+  async validateUser(username, password) {
+    return {};
+  }
+
   async createUser(createUserDto: UserDto) {
     const checkedUserExist = await this.checkUserExists(createUserDto.email);
     if (checkedUserExist) {
