@@ -53,8 +53,13 @@ export class UsersService {
     // 2. JWT를 발급
   }
 
-  async validateUser(username, password) {
-    return {};
+  async validateUser(username: string, pass: string): Promise<any> {
+    const user = await this.userRepository.findUserByName(username);
+    if (user && user.password === pass) {
+      const { password, ...result } = user;
+      return result;
+    }
+    return null;
   }
 
   async createUser(createUserDto: UserDto) {
