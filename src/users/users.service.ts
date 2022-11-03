@@ -5,10 +5,11 @@ import { v4 as uuidV4 } from 'uuid';
 import { UserDto } from './dto/credentialDto';
 import { UserInfo } from './types/user.interface';
 import { EmailService } from '../email/email.service';
-import { UserLoginDto } from './dto/userLoginDto';
 import { User } from './user.entity';
 import { saveDataWithQueryRunner } from '../utils/db/transaction';
 import { UserRepository } from '../repository/users.repository';
+import { JwtService } from '@nestjs/jwt';
+import { UserLoginDto } from './dto/userLoginDto';
 
 @Injectable()
 export class UsersService {
@@ -16,6 +17,7 @@ export class UsersService {
     @InjectRepository(UserRepository)
     private readonly userRepository: UserRepository,
     private emailService: EmailService,
+    private readonly jwtService: JwtService,
     private connection: Connection,
   ) {}
 
@@ -47,14 +49,21 @@ export class UsersService {
     return foundUser;
   }
 
-  async LoginUser(userLoginDto: UserLoginDto) {
-    // TODO
-    // 1. email, password를 가진 유저가 존재하는지 DB에서 확인하고 없다면 에러 처리
-    // 2. JWT를 발급
+  // async LoginUser(userLoginDto: UserLoginDto) {
+  //   // TODO
+  //   // 1. email, password를 가진 유저가 존재하는지 DB에서 확인하고 없다면 에러 처리
+  //   // 2. JWT를 발급
+  // }
+
+  async loginUser(userLoginDto: UserLoginDto) {
+    const payload = { email: userLoginDto.email };
+    return {
+      access_token: this.jwtService.sign(payload),
+    };
   }
 
-  async validateUser(username: string, pass: string): Promise<any> {
-    const user = await this.userRepository.findUserByName(username);
+  async validateUser(email: string, pass: string): Promise<any> {
+    const user = await this.userRepository.findUserByEmail(email);
     if (user && user.password === pass) {
       const { password, ...result } = user;
       return result;

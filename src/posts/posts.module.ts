@@ -1,9 +1,9 @@
 import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { UserRepository } from '../repository/users.repository';
-import { EmailModule } from '../email/email.module';
-import { PostRepository } from '../repository/posts.repository';
-import { UsersService } from '../users/users.service';
+import { UserRepository } from '@src/repository/users.repository';
+import { EmailModule } from '@src/email/email.module';
+import { PostRepository } from '@src/repository/posts.repository';
+import { UsersService } from '@src/users/users.service';
 import { PostsController } from './posts.controller';
 import { PostsService } from './posts.service';
 

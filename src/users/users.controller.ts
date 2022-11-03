@@ -39,7 +39,7 @@ export class UsersController {
 
   @Post('/login')
   async userLogin(@Body() userLoginDto: UserLoginDto) {
-    return await this.userService.LoginUser(userLoginDto);
+    return await this.userService.loginUser(userLoginDto);
   }
 
   @Get('/:username')
